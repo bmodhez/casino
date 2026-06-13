@@ -4033,7 +4033,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/cron/refresh-leaderboard/route.js": {
-      "bytes": 369,
+      "bytes": 425,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4055,7 +4055,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/mines/reveal-seed/route.js": {
-      "bytes": 465,
+      "bytes": 496,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4088,7 +4088,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/cron/cleanup-sessions/route.js": {
-      "bytes": 363,
+      "bytes": 419,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4099,7 +4099,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/daily-status/route.js": {
-      "bytes": 456,
+      "bytes": 487,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4110,7 +4110,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/wheel-status/route.js": {
-      "bytes": 456,
+      "bytes": 487,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4121,7 +4121,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/update-password/route.js": {
-      "bytes": 456,
+      "bytes": 487,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4132,7 +4132,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/update-username/route.js": {
-      "bytes": 454,
+      "bytes": 485,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4154,7 +4154,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/mines/cashout/route.js": {
-      "bytes": 457,
+      "bytes": 488,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4165,7 +4165,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/claim-daily/route.js": {
-      "bytes": 454,
+      "bytes": 485,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4198,7 +4198,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/auth/[...nextauth]/route.js": {
-      "bytes": 450,
+      "bytes": 481,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4209,7 +4209,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/spin-wheel/route.js": {
-      "bytes": 450,
+      "bytes": 481,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4242,7 +4242,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/mines/click/route.js": {
-      "bytes": 453,
+      "bytes": 484,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4253,7 +4253,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/seeds/rotate/route.js": {
-      "bytes": 453,
+      "bytes": 484,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4297,7 +4297,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/coinflip/route.js": {
-      "bytes": 444,
+      "bytes": 475,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4308,83 +4308,6 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/auth/register/route.js": {
-      "bytes": 405,
-      "imports": [
-        {
-          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
-          "kind": "require-call",
-          "original": "../../../../chunks/[turbopack]_runtime.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/games/plinko/route.js": {
-      "bytes": 440,
-      "imports": [
-        {
-          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
-          "kind": "require-call",
-          "original": "../../../../chunks/[turbopack]_runtime.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/user/balance/route.js": {
-      "bytes": 440,
-      "imports": [
-        {
-          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
-          "kind": "require-call",
-          "original": "../../../../chunks/[turbopack]_runtime.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/user/profile/route.js": {
-      "bytes": 440,
-      "imports": [
-        {
-          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
-          "kind": "require-call",
-          "original": "../../../../chunks/[turbopack]_runtime.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/admin/users/route.js": {
-      "bytes": 438,
-      "imports": [
-        {
-          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
-          "kind": "require-call",
-          "original": "../../../../chunks/[turbopack]_runtime.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/games/mines/route.js": {
-      "bytes": 438,
-      "imports": [
-        {
-          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
-          "kind": "require-call",
-          "original": "../../../../chunks/[turbopack]_runtime.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/leaderboard/route.js": {
-      "bytes": 340,
-      "imports": [
-        {
-          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
-          "kind": "require-call",
-          "original": "../../../chunks/[turbopack]_runtime.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/games/dice/route.js": {
       "bytes": 436,
       "imports": [
         {
@@ -4395,8 +4318,85 @@
       ],
       "format": "cjs"
     },
+    ".open-next/server-functions/default/.next/server/app/api/games/plinko/route.js": {
+      "bytes": 471,
+      "imports": [
+        {
+          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
+          "kind": "require-call",
+          "original": "../../../../chunks/[turbopack]_runtime.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    ".open-next/server-functions/default/.next/server/app/api/user/balance/route.js": {
+      "bytes": 471,
+      "imports": [
+        {
+          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
+          "kind": "require-call",
+          "original": "../../../../chunks/[turbopack]_runtime.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    ".open-next/server-functions/default/.next/server/app/api/user/profile/route.js": {
+      "bytes": 471,
+      "imports": [
+        {
+          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
+          "kind": "require-call",
+          "original": "../../../../chunks/[turbopack]_runtime.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    ".open-next/server-functions/default/.next/server/app/api/admin/users/route.js": {
+      "bytes": 469,
+      "imports": [
+        {
+          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
+          "kind": "require-call",
+          "original": "../../../../chunks/[turbopack]_runtime.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    ".open-next/server-functions/default/.next/server/app/api/games/mines/route.js": {
+      "bytes": 469,
+      "imports": [
+        {
+          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
+          "kind": "require-call",
+          "original": "../../../../chunks/[turbopack]_runtime.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    ".open-next/server-functions/default/.next/server/app/api/leaderboard/route.js": {
+      "bytes": 396,
+      "imports": [
+        {
+          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
+          "kind": "require-call",
+          "original": "../../../chunks/[turbopack]_runtime.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    ".open-next/server-functions/default/.next/server/app/api/games/dice/route.js": {
+      "bytes": 467,
+      "imports": [
+        {
+          "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
+          "kind": "require-call",
+          "original": "../../../../chunks/[turbopack]_runtime.js"
+        }
+      ],
+      "format": "cjs"
+    },
     ".open-next/server-functions/default/.next/server/app/api/user/seeds/route.js": {
-      "bytes": 434,
+      "bytes": 465,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -7609,13 +7609,13 @@
           "bytesInOutput": 16706
         },
         ".open-next/server-functions/default/.next/server/app/api/cron/refresh-leaderboard/route.js": {
-          "bytesInOutput": 500
+          "bytesInOutput": 556
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/terms-of-service/page.js": {
           "bytesInOutput": 1212
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/reveal-seed/route.js": {
-          "bytesInOutput": 593
+          "bytesInOutput": 624
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/games/coinflip/page.js": {
           "bytesInOutput": 1206
@@ -7624,28 +7624,28 @@
           "bytesInOutput": 1206
         },
         ".open-next/server-functions/default/.next/server/app/api/cron/cleanup-sessions/route.js": {
-          "bytesInOutput": 492
+          "bytesInOutput": 548
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/daily-status/route.js": {
-          "bytesInOutput": 584
+          "bytesInOutput": 615
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/wheel-status/route.js": {
-          "bytesInOutput": 584
+          "bytesInOutput": 615
         },
         ".open-next/server-functions/default/.next/server/app/api/user/update-password/route.js": {
-          "bytesInOutput": 584
+          "bytesInOutput": 615
         },
         ".open-next/server-functions/default/.next/server/app/api/user/update-username/route.js": {
-          "bytesInOutput": 582
+          "bytesInOutput": 613
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/games/plinko/page.js": {
           "bytesInOutput": 1200
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/cashout/route.js": {
-          "bytesInOutput": 581
+          "bytesInOutput": 612
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/claim-daily/route.js": {
-          "bytesInOutput": 581
+          "bytesInOutput": 612
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/games/mines/page.js": {
           "bytesInOutput": 1197
@@ -7654,10 +7654,10 @@
           "bytesInOutput": 1195
         },
         ".open-next/server-functions/default/.next/server/app/api/auth/[...nextauth]/route.js": {
-          "bytesInOutput": 577
+          "bytesInOutput": 608
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/spin-wheel/route.js": {
-          "bytesInOutput": 577
+          "bytesInOutput": 608
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/bhavinmodh/page.js": {
           "bytesInOutput": 1194
@@ -7666,10 +7666,10 @@
           "bytesInOutput": 1194
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/click/route.js": {
-          "bytesInOutput": 576
+          "bytesInOutput": 607
         },
         ".open-next/server-functions/default/.next/server/app/api/user/seeds/rotate/route.js": {
-          "bytesInOutput": 576
+          "bytesInOutput": 607
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/dashboard/page.js": {
           "bytesInOutput": 1192
@@ -7681,34 +7681,34 @@
           "bytesInOutput": 1184
         },
         ".open-next/server-functions/default/.next/server/app/api/games/coinflip/route.js": {
-          "bytesInOutput": 567
+          "bytesInOutput": 598
         },
         ".open-next/server-functions/default/.next/server/app/api/auth/register/route.js": {
-          "bytesInOutput": 527
+          "bytesInOutput": 558
         },
         ".open-next/server-functions/default/.next/server/app/api/games/plinko/route.js": {
-          "bytesInOutput": 561
+          "bytesInOutput": 592
         },
         ".open-next/server-functions/default/.next/server/app/api/user/balance/route.js": {
-          "bytesInOutput": 561
+          "bytesInOutput": 592
         },
         ".open-next/server-functions/default/.next/server/app/api/user/profile/route.js": {
-          "bytesInOutput": 561
+          "bytesInOutput": 592
         },
         ".open-next/server-functions/default/.next/server/app/api/admin/users/route.js": {
-          "bytesInOutput": 558
+          "bytesInOutput": 589
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/route.js": {
-          "bytesInOutput": 558
+          "bytesInOutput": 589
         },
         ".open-next/server-functions/default/.next/server/app/api/leaderboard/route.js": {
-          "bytesInOutput": 463
+          "bytesInOutput": 519
         },
         ".open-next/server-functions/default/.next/server/app/api/games/dice/route.js": {
-          "bytesInOutput": 555
+          "bytesInOutput": 586
         },
         ".open-next/server-functions/default/.next/server/app/api/user/seeds/route.js": {
-          "bytesInOutput": 553
+          "bytesInOutput": 584
         },
         ".open-next/server-functions/default/.next/server/app/_global-error/page.js": {
           "bytesInOutput": 736
@@ -7945,7 +7945,7 @@
           "bytesInOutput": 70881
         }
       },
-      "bytes": 2215447
+      "bytes": 2216235
     }
   }
 }
