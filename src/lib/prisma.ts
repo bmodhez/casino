@@ -1,24 +1,29 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import { Pool } from '@neondatabase/serverless';
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-  pool: Pool | undefined;
-};
+declare global {
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
+}
 
 function getPrismaClient() {
-  if (!globalForPrisma.pool) {
-    globalForPrisma.pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error('DATABASE_URL is not set');
   }
   
-  const adapter = new PrismaPg(globalForPrisma.pool);
-  return new PrismaClient({
+  const pool = new Pool({ connectionString });
+  const adapter = new PrismaNeon(pool as any);
+  
+  return new PrismaClient({ 
     adapter,
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   });
 }
 
-export const prisma = globalForPrisma.prisma ?? getPrismaClient();
+export const prisma = global.prisma || getPrismaClient();
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') {
+  global.prisma = prisma;
+}

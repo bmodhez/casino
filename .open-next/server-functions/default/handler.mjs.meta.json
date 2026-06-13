@@ -3940,7 +3940,7 @@
       "format": "esm"
     },
     ".open-next/server-functions/default/.next/server/chunks/ssr/[turbopack]_runtime.js": {
-      "bytes": 34652,
+      "bytes": 34931,
       "imports": [
         {
           "path": "worker_threads",
@@ -3970,6 +3970,11 @@
         {
           "path": "url",
           "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "C:/Downloads/Anitgravity codes/.open-next/server-functions/default/.next/server/chunks/ssr/DownloadsAnitgravity codes.open-nextserver-functionsdefault\node_modules.prismaclientquery_engine_bg.wasm",
+          "kind": "dynamic-import",
           "external": true
         },
         {
@@ -3992,7 +3997,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js": {
-      "bytes": 34642,
+      "bytes": 34921,
       "imports": [
         {
           "path": "worker_threads",
@@ -4022,6 +4027,11 @@
         {
           "path": "url",
           "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "C:/Downloads/Anitgravity codes/.open-next/server-functions/default/.next/server/chunks/DownloadsAnitgravity codes.open-nextserver-functionsdefault\node_modules.prismaclientquery_engine_bg.wasm",
+          "kind": "dynamic-import",
           "external": true
         },
         {
@@ -4055,7 +4065,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/mines/reveal-seed/route.js": {
-      "bytes": 496,
+      "bytes": 521,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4099,7 +4109,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/daily-status/route.js": {
-      "bytes": 487,
+      "bytes": 512,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4110,7 +4120,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/wheel-status/route.js": {
-      "bytes": 487,
+      "bytes": 512,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4121,7 +4131,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/update-password/route.js": {
-      "bytes": 487,
+      "bytes": 512,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4132,7 +4142,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/update-username/route.js": {
-      "bytes": 485,
+      "bytes": 510,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4154,7 +4164,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/mines/cashout/route.js": {
-      "bytes": 488,
+      "bytes": 513,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4165,7 +4175,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/claim-daily/route.js": {
-      "bytes": 485,
+      "bytes": 510,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4198,7 +4208,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/auth/[...nextauth]/route.js": {
-      "bytes": 481,
+      "bytes": 506,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4209,7 +4219,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/rewards/spin-wheel/route.js": {
-      "bytes": 481,
+      "bytes": 506,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4242,7 +4252,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/mines/click/route.js": {
-      "bytes": 484,
+      "bytes": 509,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4253,7 +4263,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/seeds/rotate/route.js": {
-      "bytes": 484,
+      "bytes": 509,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4297,7 +4307,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/coinflip/route.js": {
-      "bytes": 475,
+      "bytes": 500,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4308,7 +4318,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/auth/register/route.js": {
-      "bytes": 436,
+      "bytes": 461,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4319,7 +4329,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/plinko/route.js": {
-      "bytes": 471,
+      "bytes": 496,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4330,7 +4340,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/balance/route.js": {
-      "bytes": 471,
+      "bytes": 496,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4341,7 +4351,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/profile/route.js": {
-      "bytes": 471,
+      "bytes": 496,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4352,7 +4362,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/admin/users/route.js": {
-      "bytes": 469,
+      "bytes": 494,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4363,7 +4373,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/mines/route.js": {
-      "bytes": 469,
+      "bytes": 494,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4385,7 +4395,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/games/dice/route.js": {
-      "bytes": 467,
+      "bytes": 492,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -4396,7 +4406,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/app/api/user/seeds/route.js": {
-      "bytes": 465,
+      "bytes": 490,
       "imports": [
         {
           "path": ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js",
@@ -6543,6 +6553,11 @@
           "external": true
         },
         {
+          "path": "C:/Downloads/Anitgravity codes/.open-next/server-functions/default/.next/server/chunks/ssr/DownloadsAnitgravity codes.open-nextserver-functionsdefault\node_modules.prismaclientquery_engine_bg.wasm",
+          "kind": "dynamic-import",
+          "external": true
+        },
+        {
           "path": "worker_threads",
           "kind": "require-call",
           "external": true
@@ -6555,6 +6570,11 @@
         {
           "path": "url",
           "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "C:/Downloads/Anitgravity codes/.open-next/server-functions/default/.next/server/chunks/DownloadsAnitgravity codes.open-nextserver-functionsdefault\node_modules.prismaclientquery_engine_bg.wasm",
+          "kind": "dynamic-import",
           "external": true
         },
         {
@@ -7600,13 +7620,13 @@
           "bytesInOutput": 215
         },
         ".open-next/server-functions/default/.next/server/chunks/ssr/[turbopack]_runtime.js": {
-          "bytesInOutput": 16719
+          "bytesInOutput": 17088
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/responsible-gaming/page.js": {
           "bytesInOutput": 1217
         },
         ".open-next/server-functions/default/.next/server/chunks/[turbopack]_runtime.js": {
-          "bytesInOutput": 16706
+          "bytesInOutput": 17071
         },
         ".open-next/server-functions/default/.next/server/app/api/cron/refresh-leaderboard/route.js": {
           "bytesInOutput": 556
@@ -7615,7 +7635,7 @@
           "bytesInOutput": 1212
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/reveal-seed/route.js": {
-          "bytesInOutput": 624
+          "bytesInOutput": 649
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/games/coinflip/page.js": {
           "bytesInOutput": 1206
@@ -7627,25 +7647,25 @@
           "bytesInOutput": 548
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/daily-status/route.js": {
-          "bytesInOutput": 615
+          "bytesInOutput": 640
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/wheel-status/route.js": {
-          "bytesInOutput": 615
+          "bytesInOutput": 640
         },
         ".open-next/server-functions/default/.next/server/app/api/user/update-password/route.js": {
-          "bytesInOutput": 615
+          "bytesInOutput": 640
         },
         ".open-next/server-functions/default/.next/server/app/api/user/update-username/route.js": {
-          "bytesInOutput": 613
+          "bytesInOutput": 638
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/games/plinko/page.js": {
           "bytesInOutput": 1200
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/cashout/route.js": {
-          "bytesInOutput": 612
+          "bytesInOutput": 637
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/claim-daily/route.js": {
-          "bytesInOutput": 612
+          "bytesInOutput": 637
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/games/mines/page.js": {
           "bytesInOutput": 1197
@@ -7654,10 +7674,10 @@
           "bytesInOutput": 1195
         },
         ".open-next/server-functions/default/.next/server/app/api/auth/[...nextauth]/route.js": {
-          "bytesInOutput": 608
+          "bytesInOutput": 633
         },
         ".open-next/server-functions/default/.next/server/app/api/rewards/spin-wheel/route.js": {
-          "bytesInOutput": 608
+          "bytesInOutput": 633
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/bhavinmodh/page.js": {
           "bytesInOutput": 1194
@@ -7666,10 +7686,10 @@
           "bytesInOutput": 1194
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/click/route.js": {
-          "bytesInOutput": 607
+          "bytesInOutput": 632
         },
         ".open-next/server-functions/default/.next/server/app/api/user/seeds/rotate/route.js": {
-          "bytesInOutput": 607
+          "bytesInOutput": 632
         },
         ".open-next/server-functions/default/.next/server/app/(dashboard)/dashboard/page.js": {
           "bytesInOutput": 1192
@@ -7681,34 +7701,34 @@
           "bytesInOutput": 1184
         },
         ".open-next/server-functions/default/.next/server/app/api/games/coinflip/route.js": {
-          "bytesInOutput": 598
+          "bytesInOutput": 623
         },
         ".open-next/server-functions/default/.next/server/app/api/auth/register/route.js": {
-          "bytesInOutput": 558
+          "bytesInOutput": 583
         },
         ".open-next/server-functions/default/.next/server/app/api/games/plinko/route.js": {
-          "bytesInOutput": 592
+          "bytesInOutput": 617
         },
         ".open-next/server-functions/default/.next/server/app/api/user/balance/route.js": {
-          "bytesInOutput": 592
+          "bytesInOutput": 617
         },
         ".open-next/server-functions/default/.next/server/app/api/user/profile/route.js": {
-          "bytesInOutput": 592
+          "bytesInOutput": 617
         },
         ".open-next/server-functions/default/.next/server/app/api/admin/users/route.js": {
-          "bytesInOutput": 589
+          "bytesInOutput": 614
         },
         ".open-next/server-functions/default/.next/server/app/api/games/mines/route.js": {
-          "bytesInOutput": 589
+          "bytesInOutput": 614
         },
         ".open-next/server-functions/default/.next/server/app/api/leaderboard/route.js": {
           "bytesInOutput": 519
         },
         ".open-next/server-functions/default/.next/server/app/api/games/dice/route.js": {
-          "bytesInOutput": 586
+          "bytesInOutput": 611
         },
         ".open-next/server-functions/default/.next/server/app/api/user/seeds/route.js": {
-          "bytesInOutput": 584
+          "bytesInOutput": 609
         },
         ".open-next/server-functions/default/.next/server/app/_global-error/page.js": {
           "bytesInOutput": 736
@@ -7945,7 +7965,7 @@
           "bytesInOutput": 70881
         }
       },
-      "bytes": 2216235
+      "bytes": 2217469
     }
   }
 }
