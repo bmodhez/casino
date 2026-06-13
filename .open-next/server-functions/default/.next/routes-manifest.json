@@ -117,6 +117,12 @@
       "namedRegex": "^/api/games/plinko(?:/)?$"
     },
     {
+      "page": "/api/health",
+      "regex": "^/api/health(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/health(?:/)?$"
+    },
+    {
       "page": "/api/leaderboard",
       "regex": "^/api/leaderboard(?:/)?$",
       "routeKeys": {},

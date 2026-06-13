@@ -25,6 +25,7 @@
   "/api/games/mines/reveal-seed/route": "/api/games/mines/reveal-seed",
   "/api/games/mines/route": "/api/games/mines",
   "/api/games/plinko/route": "/api/games/plinko",
+  "/api/health/route": "/api/health",
   "/api/leaderboard/route": "/api/leaderboard",
   "/api/rewards/claim-daily/route": "/api/rewards/claim-daily",
   "/api/rewards/daily-status/route": "/api/rewards/daily-status",

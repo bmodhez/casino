@@ -25,6 +25,7 @@
   "/api/games/mines/reveal-seed/route": "app/api/games/mines/reveal-seed/route.js",
   "/api/games/mines/route": "app/api/games/mines/route.js",
   "/api/games/plinko/route": "app/api/games/plinko/route.js",
+  "/api/health/route": "app-edge-has-no-entrypoint",
   "/api/leaderboard/route": "app/api/leaderboard/route.js",
   "/api/rewards/claim-daily/route": "app/api/rewards/claim-daily/route.js",
   "/api/rewards/daily-status/route": "app/api/rewards/daily-status/route.js",
