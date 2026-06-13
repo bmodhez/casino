@@ -1,0 +1,35 @@
+name: Refresh Leaderboard Cache
+
+on:
+  schedule:
+    # Runs at 6:30 PM UTC (12:00 AM IST) every day
+    - cron: '30 18 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  refresh-leaderboard:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Refresh Leaderboard
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X GET ${{ secrets.PRODUCTION_URL }}/api/cron/refresh-leaderboard \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+          
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" -ne 200 ]; then
+            echo "Error: Leaderboard refresh failed with status $http_code"
+            exit 1
+          fi
+          
+          echo "✅ Leaderboard refreshed successfully!"
+      
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ Leaderboard refresh failed! Check the logs above."

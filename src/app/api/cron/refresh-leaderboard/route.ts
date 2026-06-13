@@ -1,0 +1,59 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+
+// This endpoint will be called by Vercel Cron at 12:00 AM IST (6:30 PM UTC previous day)
+export async function GET(request: NextRequest) {
+  try {
+    // Verify the request is from Vercel Cron
+    const authHeader = request.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Update leaderboard cache
+    const topUsers = await prisma.user.findMany({
+      take: 100,
+      orderBy: { coins: 'desc' },
+      select: {
+        id: true,
+        username: true,
+        image: true,
+        coins: true,
+        level: true,
+        xp: true,
+        totalGames: true,
+        totalWins: true,
+      },
+    });
+
+    const leaderboardData = topUsers.map((user) => ({
+      ...user,
+      winRate: user.totalGames > 0 ? Math.round((user.totalWins / user.totalGames) * 100) : 0,
+    }));
+
+    // Save to cache file
+    const fs = require('fs');
+    const path = require('path');
+    const cacheFile = path.join(process.cwd(), '.leaderboard-cache.json');
+    
+    fs.writeFileSync(cacheFile, JSON.stringify({
+      lastUpdated: new Date().toISOString(),
+      data: leaderboardData,
+    }, null, 2));
+
+    console.log(`[CRON] Leaderboard refreshed at ${new Date().toISOString()}`);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Leaderboard refreshed successfully',
+      count: leaderboardData.length,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('[CRON] Leaderboard refresh failed:', error);
+    return NextResponse.json(
+      { error: 'Failed to refresh leaderboard' },
+      { status: 500 }
+    );
+  }
+}
