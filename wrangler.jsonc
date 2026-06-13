@@ -1,0 +1,7 @@
+{
+  "name": "minesarena",
+  "compatibility_date": "2024-12-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": ".open-next/worker.js",
+  "send_metrics": false
+}
