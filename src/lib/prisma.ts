@@ -3,61 +3,56 @@ import { PrismaNeon } from '@prisma/adapter-neon';
 import { Pool } from '@neondatabase/serverless';
 
 declare global {
-  // eslint-disable-next-line no-var
-  var prismaGlobal: PrismaClient | undefined;
+  // eslint-disable-line no-var
+  var __prisma: PrismaClient | undefined;
 }
 
-let prismaInstance: PrismaClient | null = null;
+let prismaClientSingleton: PrismaClient | undefined;
 
-function getPrismaClient(): PrismaClient {
-  if (prismaInstance) {
-    return prismaInstance;
-  }
-
-  // Check global cache first
-  if (global.prismaGlobal) {
-    prismaInstance = global.prismaGlobal;
-    return prismaInstance;
-  }
-
+function createPrismaClient(): PrismaClient {
   const connectionString = process.env.DATABASE_URL;
   
-  // During build time or if no DATABASE_URL, create a dummy client
   if (!connectionString) {
-    console.warn('DATABASE_URL not set - creating placeholder client');
-    const client = new PrismaClient({
-      datasources: {
-        db: {
-          url: 'postgresql://placeholder:placeholder@localhost:5432/placeholder',
-        },
-      },
+    // Build-time placeholder - won't connect
+    return new PrismaClient({
+      datasources: { db: { url: 'postgresql://placeholder@localhost/placeholder' } },
     });
-    prismaInstance = client;
-    return client;
   }
   
-  // Runtime client with Neon adapter for Cloudflare Workers
-  try {
-    const pool = new Pool({ connectionString });
-    const adapter = new PrismaNeon(pool as any);
-    
-    const client = new PrismaClient({ 
-      adapter,
-      log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-    });
-
-    prismaInstance = client;
-    
-    // Cache in global for dev
-    if (process.env.NODE_ENV !== 'production') {
-      global.prismaGlobal = client;
-    }
-    
-    return client;
-  } catch (error) {
-    console.error('Failed to create Prisma client:', error);
-    throw error;
-  }
+  // Create Neon pool connection
+  const pool = new Pool({ connectionString });
+  const adapter = new PrismaNeon(pool as any);
+  
+  return new PrismaClient({ 
+    adapter,
+    log: ['error'],
+  });
 }
 
-export const prisma = getPrismaClient();
+// Export getter function instead of direct client to delay initialization
+function getPrisma(): PrismaClient {
+  if (prismaClientSingleton) {
+    return prismaClientSingleton;
+  }
+  
+  if (global.__prisma) {
+    prismaClientSingleton = global.__prisma;
+    return prismaClientSingleton;
+  }
+  
+  prismaClientSingleton = createPrismaClient();
+  
+  if (process.env.NODE_ENV !== 'production') {
+    global.__prisma = prismaClientSingleton;
+  }
+  
+  return prismaClientSingleton;
+}
+
+// Export as proxy to truly lazy-load
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_, prop) {
+    const client = getPrisma();
+    return (client as any)[prop];
+  },
+});
