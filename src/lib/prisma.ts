@@ -4,18 +4,27 @@ import { Pool } from '@neondatabase/serverless';
 
 declare global {
   // eslint-disable-next-line no-var
-  var prisma: PrismaClient | undefined;
+  var prismaInstance: PrismaClient | undefined;
 }
 
-function getPrismaClient() {
+let cachedPrisma: PrismaClient | null = null;
+
+function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL;
   
-  // Return a dummy client during build time
-  if (!connectionString) {
-    console.warn('DATABASE_URL not set - using build-time placeholder');
-    return new PrismaClient();
+  // During build time, return a dummy client that won't actually connect
+  if (!connectionString || typeof window === 'undefined' && !process.env.CLOUDFLARE_ACCOUNT_ID) {
+    // Build-time placeholder - won't actually connect to DB
+    return new PrismaClient({
+      datasources: {
+        db: {
+          url: 'postgresql://placeholder:placeholder@localhost:5432/placeholder',
+        },
+      },
+    });
   }
   
+  // Runtime client with Neon adapter for Cloudflare Workers
   const pool = new Pool({ connectionString });
   const adapter = new PrismaNeon(pool as any);
   
@@ -25,8 +34,19 @@ function getPrismaClient() {
   });
 }
 
-export const prisma = global.prisma || getPrismaClient();
-
-if (process.env.NODE_ENV !== 'production') {
-  global.prisma = prisma;
-}
+// Use a getter to ensure lazy initialization
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_, prop) {
+    if (!cachedPrisma) {
+      if (global.prismaInstance) {
+        cachedPrisma = global.prismaInstance;
+      } else {
+        cachedPrisma = createPrismaClient();
+        if (process.env.NODE_ENV !== 'production') {
+          global.prismaInstance = cachedPrisma;
+        }
+      }
+    }
+    return (cachedPrisma as any)[prop];
+  },
+});
