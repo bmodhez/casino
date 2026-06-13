@@ -9,8 +9,11 @@ declare global {
 
 function getPrismaClient() {
   const connectionString = process.env.DATABASE_URL;
+  
+  // Return a dummy client during build time
   if (!connectionString) {
-    throw new Error('DATABASE_URL is not set');
+    console.warn('DATABASE_URL not set - using build-time placeholder');
+    return new PrismaClient();
   }
   
   const pool = new Pool({ connectionString });
