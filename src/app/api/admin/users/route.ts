@@ -38,7 +38,7 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    const usersWithGameCount = users.map(user => ({
+    const usersWithGameCount = users.map((user) => ({
       id: user.id,
       username: user.username,
       email: user.email,
