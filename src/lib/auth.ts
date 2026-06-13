@@ -8,11 +8,16 @@ import { generateServerSeed, generateClientSeed, hashServerSeed } from './fairne
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'jwt' },
+  session: { 
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   pages: {
     signIn: '/auth/login',
     error: '/auth/error',
   },
+  trustHost: true, // Required for Cloudflare Workers
+  useSecureCookies: process.env.NODE_ENV === 'production',
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
