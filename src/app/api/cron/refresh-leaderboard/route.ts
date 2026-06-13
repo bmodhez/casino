@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// This endpoint will be called by Vercel Cron at 12:00 AM IST (6:30 PM UTC previous day)
+// This endpoint will be called by Cron at 12:00 AM IST (6:30 PM UTC previous day)
 export async function GET(request: NextRequest) {
   try {
-    // Verify the request is from Vercel Cron
+    // Verify the request is from Cron
     const authHeader = request.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Update leaderboard cache
+    // Get top users by coins
     const topUsers = await prisma.user.findMany({
       take: 100,
       orderBy: { coins: 'desc' },
@@ -21,15 +21,32 @@ export async function GET(request: NextRequest) {
         coins: true,
         level: true,
         xp: true,
-        totalGames: true,
-        totalWins: true,
+        gameHistory: {
+          select: {
+            win: true,
+          },
+        },
       },
     });
 
-    const leaderboardData = topUsers.map((user) => ({
-      ...user,
-      winRate: user.totalGames > 0 ? Math.round((user.totalWins / user.totalGames) * 100) : 0,
-    }));
+    // Calculate stats from game history
+    const leaderboardData = topUsers.map((user) => {
+      const totalGames = user.gameHistory.length;
+      const totalWins = user.gameHistory.filter((game) => game.win).length;
+      const winRate = totalGames > 0 ? Math.round((totalWins / totalGames) * 100) : 0;
+
+      return {
+        id: user.id,
+        username: user.username,
+        image: user.image,
+        coins: user.coins,
+        level: user.level,
+        xp: user.xp,
+        totalGames,
+        totalWins,
+        winRate,
+      };
+    });
 
     // Save to cache file
     const fs = require('fs');
