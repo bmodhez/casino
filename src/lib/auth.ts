@@ -29,12 +29,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!credentials?.email || !credentials?.password) return null;
 
         try {
-          // Dynamically import prisma only when needed
-          const { prisma } = await import('./prisma');
+          // Use D1 directly instead of Prisma
+          const { executeOne } = await import('@/lib/d1');
           
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string },
-          });
+          const user = await executeOne(
+            'SELECT * FROM User WHERE email = ? LIMIT 1',
+            [credentials.email as string]
+          );
 
           if (!user || !user.passwordHash) return null;
           if (user.banned) throw new Error('Account banned');

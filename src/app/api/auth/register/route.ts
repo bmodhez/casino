@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/prisma';
+import { executeOne, executeRun } from '@/lib/d1';
 import { generateServerSeed, generateClientSeed, hashServerSeed } from '@/lib/fairness';
 
 export async function POST(request: Request) {
@@ -41,18 +41,13 @@ export async function POST(request: Request) {
     const normalizedUsername = username.trim().toLowerCase();
     const normalizedEmail = email.toLowerCase().trim();
 
-    // Check if user already exists
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: normalizedEmail },
-          { username: normalizedUsername },
-        ],
-      },
-    });
+    // Check if user already exists using D1 raw SQL
+    const existingUser = await executeOne(
+      'SELECT * FROM User WHERE email = ? OR username = ? LIMIT 1',
+      [normalizedEmail, normalizedUsername]
+    );
 
     if (existingUser) {
-      // Check which field is duplicate and return specific error
       if (existingUser.email === normalizedEmail && existingUser.username === normalizedUsername) {
         return NextResponse.json({ error: 'Both username and email are already taken' }, { status: 400 });
       }
@@ -67,48 +62,32 @@ export async function POST(request: Request) {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Create user and provably fair seed in a transaction
-    const user = await prisma.$transaction(async (tx) => {
-      const newUser = await tx.user.create({
-        data: {
-          username: normalizedUsername,
-          email: normalizedEmail,
-          passwordHash,
-          coins: 1000.0, // Initial coins balance
-          xp: 0,
-          level: 1,
-        },
-      });
+    // Generate UUID for user
+    const userId = crypto.randomUUID();
 
-      const serverSeed = generateServerSeed();
-      await tx.provablyFairSeed.create({
-        data: {
-          userId: newUser.id,
-          serverSeed,
-          serverSeedHash: hashServerSeed(serverSeed),
-          clientSeed: generateClientSeed(),
-          active: true,
-        },
-      });
+    // Create user using D1 raw SQL
+    await executeRun(
+      `INSERT INTO User (id, username, email, passwordHash, role, coins, xp, level, banned, createdAt, updatedAt) 
+       VALUES (?, ?, ?, ?, 'USER', 1000.0, 0, 1, 0, datetime('now'), datetime('now'))`,
+      [userId, normalizedUsername, normalizedEmail, passwordHash]
+    );
 
-      return newUser;
-    });
+    // Create initial provably fair seed
+    const serverSeed = generateServerSeed();
+    const seedId = crypto.randomUUID();
+    
+    await executeRun(
+      `INSERT INTO ProvablyFairSeed (id, userId, serverSeed, serverSeedHash, clientSeed, nonce, active, createdAt, updatedAt)
+       VALUES (?, ?, ?, ?, ?, 0, 1, datetime('now'), datetime('now'))`,
+      [seedId, userId, serverSeed, hashServerSeed(serverSeed), generateClientSeed()]
+    );
 
     return NextResponse.json(
-      { success: true, message: 'User registered successfully', userId: user.id },
+      { success: true, message: 'User registered successfully', userId },
       { status: 201 }
     );
   } catch (error: any) {
     console.error('Registration error:', error);
-    if (error?.code === 'P2002') {
-      const field = error?.meta?.target?.[0];
-      if (field === 'username') {
-        return NextResponse.json({ error: 'Username already taken' }, { status: 409 });
-      }
-      if (field === 'email') {
-        return NextResponse.json({ error: 'Email already in use' }, { status: 409 });
-      }
-    }
     return NextResponse.json(
       { error: 'An unexpected error occurred during registration' },
       { status: 500 }
