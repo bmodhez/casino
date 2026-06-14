@@ -1,8 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaD1 } from '@prisma/adapter-d1';
-
-// Cloudflare D1 type - will be available in Workers runtime
-type D1Database = any;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -11,24 +7,13 @@ declare global {
 
 let prismaClientSingleton: PrismaClient | undefined;
 
-function createPrismaClient(db?: D1Database): PrismaClient {
-  // If D1 binding is available (Cloudflare Workers runtime)
-  if (db) {
-    const adapter = new PrismaD1(db);
-    return new PrismaClient({ 
-      adapter,
-      log: ['error'],
-    });
-  }
-  
-  // Build-time or local dev fallback
+function createPrismaClient(): PrismaClient {
   return new PrismaClient({
     log: ['error'],
   });
 }
 
-// Export getter function that accepts D1 binding
-export function getPrismaClient(db?: D1Database): PrismaClient {
+export function getPrismaClient(): PrismaClient {
   if (prismaClientSingleton) {
     return prismaClientSingleton;
   }
@@ -38,7 +23,7 @@ export function getPrismaClient(db?: D1Database): PrismaClient {
     return prismaClientSingleton;
   }
   
-  prismaClientSingleton = createPrismaClient(db);
+  prismaClientSingleton = createPrismaClient();
   
   if (process.env.NODE_ENV !== 'production') {
     global.__prisma = prismaClientSingleton;
@@ -47,5 +32,5 @@ export function getPrismaClient(db?: D1Database): PrismaClient {
   return prismaClientSingleton;
 }
 
-// Default export for build-time compatibility
+// Default export
 export const prisma = getPrismaClient();
