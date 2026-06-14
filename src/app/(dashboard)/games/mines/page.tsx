@@ -189,7 +189,7 @@ export default function MinesPage() {
   const potentialPayout = betAmount * (gameActive ? multiplier : previewMultiplier);
 
   return (
-    <div className="max-w-4xl mx-auto min-h-[calc(100vh-200px)]">
+    <div className="max-w-4xl mx-auto px-4 min-h-[calc(100vh-200px)]">
       <AuthModal 
         isOpen={showModal} 
         onClose={() => setShowModal(false)}
@@ -228,8 +228,8 @@ export default function MinesPage() {
             )}
           </AnimatePresence>
           
-          <div className="glass rounded-2xl p-6">
-            <div className="grid grid-cols-5 gap-2">
+          <div className="glass rounded-2xl p-4 sm:p-6 max-w-md mx-auto">
+            <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
               {cells.map((state, i) => (
               <motion.button
                 key={i}
