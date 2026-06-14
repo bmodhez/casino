@@ -2,12 +2,8 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import bcrypt from 'bcryptjs';
-import { prisma } from './prisma';
-import { generateServerSeed, generateClientSeed, hashServerSeed } from './fairness';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  // Don't use PrismaAdapter - it causes CPU issues on Cloudflare Workers
-  // adapter: PrismaAdapter(prisma),
   session: { 
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -32,20 +28,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
-        });
+        try {
+          // Dynamically import prisma only when needed
+          const { prisma } = await import('./prisma');
+          
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email as string },
+          });
 
-        if (!user || !user.passwordHash) return null;
-        if (user.banned) throw new Error('Account banned');
+          if (!user || !user.passwordHash) return null;
+          if (user.banned) throw new Error('Account banned');
 
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.passwordHash
-        );
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.passwordHash
+          );
 
-        if (!isValid) return null;
-        return user;
+          if (!isValid) return null;
+          return user;
+        } catch (error) {
+          console.error('Auth error:', error);
+          return null;
+        }
       },
     }),
   ],
