@@ -1,5 +1,4 @@
 import NextAuth from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import bcrypt from 'bcryptjs';
@@ -7,7 +6,8 @@ import { prisma } from './prisma';
 import { generateServerSeed, generateClientSeed, hashServerSeed } from './fairness';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  // Don't use PrismaAdapter - it causes CPU issues on Cloudflare Workers
+  // adapter: PrismaAdapter(prisma),
   session: { 
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -67,42 +67,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         (session.user as any).coins = token.coins;
       }
       return session;
-    },
-    async signIn({ user, account }) {
-      // For OAuth signins, create initial seed if needed
-      if (account?.provider !== 'credentials') {
-        const existingUser = await prisma.user.findUnique({
-          where: { email: user.email! },
-          include: { seeds: { where: { active: true } } },
-        });
-        
-        if (existingUser && existingUser.seeds.length === 0) {
-          const serverSeed = generateServerSeed();
-          await prisma.provablyFairSeed.create({
-            data: {
-              userId: existingUser.id,
-              serverSeed,
-              serverSeedHash: hashServerSeed(serverSeed),
-              clientSeed: generateClientSeed(),
-            },
-          });
-        }
-      }
-      return true;
-    },
-  },
-  events: {
-    async createUser({ user }) {
-      // Create initial provably fair seed for new user
-      const serverSeed = generateServerSeed();
-      await prisma.provablyFairSeed.create({
-        data: {
-          userId: user.id!,
-          serverSeed,
-          serverSeedHash: hashServerSeed(serverSeed),
-          clientSeed: generateClientSeed(),
-        },
-      });
     },
   },
 });
