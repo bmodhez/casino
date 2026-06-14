@@ -1,36 +1,34 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaNeon } from '@prisma/adapter-neon';
-import { Pool } from '@neondatabase/serverless';
+import { PrismaD1 } from '@prisma/adapter-d1';
+
+// Cloudflare D1 type - will be available in Workers runtime
+type D1Database = any;
 
 declare global {
-  // eslint-disable-line no-var
+  // eslint-disable-next-line no-var
   var __prisma: PrismaClient | undefined;
 }
 
 let prismaClientSingleton: PrismaClient | undefined;
 
-function createPrismaClient(): PrismaClient {
-  const connectionString = process.env.DATABASE_URL;
-  
-  if (!connectionString) {
-    // Build-time placeholder - won't connect
-    return new PrismaClient({
-      datasources: { db: { url: 'postgresql://placeholder@localhost/placeholder' } },
+function createPrismaClient(db?: D1Database): PrismaClient {
+  // If D1 binding is available (Cloudflare Workers runtime)
+  if (db) {
+    const adapter = new PrismaD1(db);
+    return new PrismaClient({ 
+      adapter,
+      log: ['error'],
     });
   }
   
-  // Create Neon pool connection
-  const pool = new Pool({ connectionString });
-  const adapter = new PrismaNeon(pool as any);
-  
-  return new PrismaClient({ 
-    adapter,
+  // Build-time or local dev fallback
+  return new PrismaClient({
     log: ['error'],
   });
 }
 
-// Export getter function instead of direct client to delay initialization
-function getPrisma(): PrismaClient {
+// Export getter function that accepts D1 binding
+export function getPrismaClient(db?: D1Database): PrismaClient {
   if (prismaClientSingleton) {
     return prismaClientSingleton;
   }
@@ -40,7 +38,7 @@ function getPrisma(): PrismaClient {
     return prismaClientSingleton;
   }
   
-  prismaClientSingleton = createPrismaClient();
+  prismaClientSingleton = createPrismaClient(db);
   
   if (process.env.NODE_ENV !== 'production') {
     global.__prisma = prismaClientSingleton;
@@ -49,10 +47,5 @@ function getPrisma(): PrismaClient {
   return prismaClientSingleton;
 }
 
-// Export as proxy to truly lazy-load
-export const prisma = new Proxy({} as PrismaClient, {
-  get(_, prop) {
-    const client = getPrisma();
-    return (client as any)[prop];
-  },
-});
+// Default export for build-time compatibility
+export const prisma = getPrismaClient();

@@ -9,5 +9,12 @@
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
 	},
-	"send_metrics": false
+	"send_metrics": false,
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "minesarena-db",
+			"database_id": "7bf92227-5a79-49b7-bf34-f5d0e02aa5f9"
+		}
+	]
 }
