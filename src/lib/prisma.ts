@@ -1,36 +1,48 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaD1 } from '@prisma/adapter-d1';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __prisma: PrismaClient | undefined;
+// Get Cloudflare env from AsyncLocalStorage context
+function getCloudflareContext() {
+  try {
+    // @ts-ignore - Cloudflare Workers context
+    return globalThis[Symbol.for('__cloudflare-request-context__')];
+  } catch {
+    return null;
+  }
 }
 
-let prismaClientSingleton: PrismaClient | undefined;
-
-function createPrismaClient(): PrismaClient {
-  return new PrismaClient({
-    log: ['error'],
-  });
-}
+let cachedPrisma: PrismaClient | null = null;
 
 export function getPrismaClient(): PrismaClient {
-  if (prismaClientSingleton) {
-    return prismaClientSingleton;
+  if (cachedPrisma) {
+    return cachedPrisma;
   }
-  
-  if (global.__prisma) {
-    prismaClientSingleton = global.__prisma;
-    return prismaClientSingleton;
+
+  // Try to get D1 binding from Cloudflare context
+  const ctx = getCloudflareContext();
+  const db = ctx?.env?.DB;
+
+  if (db) {
+    // Use D1 adapter in production
+    const adapter = new PrismaD1(db);
+    cachedPrisma = new PrismaClient({ 
+      adapter,
+      log: ['error'],
+    });
+  } else {
+    // Fallback for build time - will fail but that's ok during build
+    cachedPrisma = new PrismaClient({
+      log: ['error'],
+    });
   }
-  
-  prismaClientSingleton = createPrismaClient();
-  
-  if (process.env.NODE_ENV !== 'production') {
-    global.__prisma = prismaClientSingleton;
-  }
-  
-  return prismaClientSingleton;
+
+  return cachedPrisma;
 }
 
-// Default export
-export const prisma = getPrismaClient();
+// Export prisma instance
+export const prisma = new Proxy({} as PrismaClient, {
+  get(target, prop) {
+    const client = getPrismaClient();
+    return (client as any)[prop];
+  },
+});
