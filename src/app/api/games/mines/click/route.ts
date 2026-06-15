@@ -11,9 +11,12 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { gameId, position } = await req.json() as { gameId: string; position: number };
+    const { gameId, cellIndex, position } = await req.json() as { gameId: string; cellIndex?: number; position?: number };
+    
+    // Support both cellIndex (frontend) and position (alternative)
+    const tilePosition = cellIndex !== undefined ? cellIndex : position;
 
-    if (!gameId || position === undefined || position < 0 || position > 24) {
+    if (!gameId || tilePosition === undefined || tilePosition < 0 || tilePosition > 24) {
       return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 });
     }
 
@@ -31,7 +34,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const minePositions = JSON.parse(game.minePositions) as number[];
-    const isMine = minePositions.includes(position);
+    const isMine = minePositions.includes(tilePosition);
 
     if (isMine) {
       // Hit a mine - game over
@@ -55,7 +58,7 @@ export async function PUT(req: NextRequest) {
 
       return NextResponse.json({
         result: 'mine',
-        position,
+        position: tilePosition,
         minePositions,
         gemsRevealed: game.gemsRevealed + 1,
         multiplier: 0,
@@ -73,7 +76,7 @@ export async function PUT(req: NextRequest) {
 
       return NextResponse.json({
         result: 'safe',
-        position,
+        position: tilePosition,
         gemsRevealed: newGemsRevealed,
         multiplier,
       });
