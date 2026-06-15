@@ -23,12 +23,17 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
+      console.error('[Claim Daily] No session found');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.log('[Claim Daily] User ID:', session.user.id);
+
     const { day } = await req.json() as { day: number };
+    console.log('[Claim Daily] Requested day:', day);
 
     if (!day || day < 1) {
+      console.error('[Claim Daily] Invalid day:', day);
       return NextResponse.json({ error: 'Invalid day' }, { status: 400 });
     }
 
@@ -37,19 +42,27 @@ export async function POST(req: NextRequest) {
       [session.user.id]
     );
 
+    console.log('[Claim Daily] User found:', !!user);
+    console.log('[Claim Daily] User coins:', user?.coins);
+    console.log('[Claim Daily] Last claimed:', user?.lastDailyClaimed);
+
     if (!user) {
+      console.error('[Claim Daily] User not found in database');
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    console.log('[Claim Daily] Today date:', today.toISOString());
 
     // Check if already claimed today
     if (user.lastDailyClaimed) {
       const lastClaimed = new Date(user.lastDailyClaimed);
       lastClaimed.setHours(0, 0, 0, 0);
+      console.log('[Claim Daily] Last claimed date:', lastClaimed.toISOString());
       
       if (lastClaimed.getTime() === today.getTime()) {
+        console.log('[Claim Daily] Already claimed today');
         return NextResponse.json({ error: 'Already claimed today' }, { status: 400 });
       }
     }
@@ -63,8 +76,13 @@ export async function POST(req: NextRequest) {
     const currentStreak = streakCount?.count || 0;
     const nextDay = currentStreak + 1;
 
+    console.log('[Claim Daily] Current streak:', currentStreak);
+    console.log('[Claim Daily] Next day should be:', nextDay);
+    console.log('[Claim Daily] User requesting day:', day);
+
     // Validate user is claiming the correct next day
     if (day !== nextDay) {
+      console.error('[Claim Daily] Day mismatch - expected:', nextDay, 'got:', day);
       return NextResponse.json({ 
         error: `You must claim Day ${nextDay} first`,
         expectedDay: nextDay 
@@ -75,8 +93,12 @@ export async function POST(req: NextRequest) {
     const rewardAmount = getRewardForDay(day);
     const newBalance = user.coins + rewardAmount;
 
+    console.log('[Claim Daily] Reward amount:', rewardAmount);
+    console.log('[Claim Daily] New balance will be:', newBalance);
+
     // Create daily streak record and update user
     const streakId = crypto.randomUUID();
+    console.log('[Claim Daily] Creating streak record:', streakId);
     
     // Use D1 batch for transaction-like behavior
     await executeRun(
@@ -85,12 +107,16 @@ export async function POST(req: NextRequest) {
       [streakId, session.user.id, day, today.toISOString(), today.toISOString()]
     );
 
+    console.log('[Claim Daily] Streak record created');
+
     await executeRun(
       `UPDATE User 
        SET coins = ?, lastDailyClaimed = ?, updatedAt = datetime('now')
        WHERE id = ?`,
       [newBalance, today.toISOString(), session.user.id]
     );
+
+    console.log('[Claim Daily] User updated successfully');
 
     return NextResponse.json({
       success: true,

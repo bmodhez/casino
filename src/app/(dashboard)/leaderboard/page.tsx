@@ -90,10 +90,6 @@ export default function LeaderboardPage() {
             <p className="text-slate-400 text-sm">Top players ranked by coins</p>
           </div>
         </div>
-        <div className="text-right hidden sm:block">
-          <p className="text-xs text-slate-500">Refreshes every 24hrs</p>
-          <p className="text-xs text-amber-400 font-medium">at 12:00 AM IST</p>
-        </div>
       </motion.div>
 
       {/* Period Filter */}

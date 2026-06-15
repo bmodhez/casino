@@ -1,16 +1,20 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { executeQuery, executeOne } from '@/lib/d1';
+import { executeOne } from '@/lib/d1';
 
 export async function GET() {
   try {
     const session = await auth();
     if (!session?.user?.id) {
+      console.error('[Daily Status] No session found');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.log('[Daily Status] User ID:', session.user.id);
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    console.log('[Daily Status] Today date:', today.toISOString());
 
     // Get total streak count (all claims)
     const streakCount = await executeOne(
@@ -19,6 +23,7 @@ export async function GET() {
     );
 
     const currentStreak = streakCount?.count || 0;
+    console.log('[Daily Status] Current streak count:', currentStreak);
 
     // Check if user claimed today
     const user = await executeOne(
@@ -26,18 +31,25 @@ export async function GET() {
       [session.user.id]
     );
 
+    console.log('[Daily Status] User last claimed:', user?.lastDailyClaimed);
+
     let canClaimToday = true;
     if (user?.lastDailyClaimed) {
       const lastClaimed = new Date(user.lastDailyClaimed);
       lastClaimed.setHours(0, 0, 0, 0);
       canClaimToday = lastClaimed.getTime() !== today.getTime();
+      console.log('[Daily Status] Can claim today:', canClaimToday);
     }
 
-    return NextResponse.json({
+    const response = {
       claimedDays: [], // Not needed for infinite streak
       currentStreak,
       canClaimToday,
-    });
+    };
+
+    console.log('[Daily Status] Response:', response);
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error('[Daily Status] Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
