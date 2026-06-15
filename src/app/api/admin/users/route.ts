@@ -1,66 +1,51 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { notImplementedYet } from '@/lib/stub-api';
-
-export async function GET() { return notImplementedYet(); }
-export async function POST() { return notImplementedYet(); }
-export async function PUT() { return notImplementedYet(); }
-export async function DELETE() { return notImplementedYet(); }
-
-/* Original code commented out:
+import { executeQuery } from '@/lib/d1';
 
 export async function GET() {
   try {
     const session = await auth();
     
-    // Check if user is authenticated
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if user is admin
-    const currentUser = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { role: true },
-    });
+    // Check if user is admin (lightweight query)
+    const adminCheck = await executeQuery(
+      'SELECT role FROM User WHERE id = ? LIMIT 1',
+      [session.user.id]
+    );
 
-    if (currentUser?.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
+    if (!adminCheck.results?.[0] || (adminCheck.results[0] as any).role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Fetch all users with game count
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        coins: true,
-        level: true,
-        role: true,
-        createdAt: true,
-        _count: {
-          select: { gameHistory: true },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
+    // Fetch users with aggregated game stats (single optimized query with LEFT JOIN)
+    const usersResult = await executeQuery(`
+      SELECT 
+        u.id,
+        u.username,
+        u.email,
+        u.role,
+        u.coins,
+        u.level,
+        u.banned,
+        u.createdAt,
+        COALESCE(COUNT(gh.id), 0) as totalGamesPlayed,
+        COALESCE(SUM(gh.betAmount), 0) as totalWagered,
+        COALESCE(SUM(gh.payout), 0) as totalPayout
+      FROM User u
+      LEFT JOIN GameHistory gh ON u.id = gh.userId
+      GROUP BY u.id
+      ORDER BY u.createdAt DESC
+      LIMIT 100
+    `, []);
+
+    return NextResponse.json({ 
+      users: usersResult.results || []
     });
-
-    const usersWithGameCount = users.map((user) => ({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      coins: user.coins,
-      level: user.level,
-      role: user.role,
-      createdAt: user.createdAt,
-      totalGames: user._count.gameHistory,
-    }));
-
-    return NextResponse.json(usersWithGameCount);
   } catch (error) {
-    console.error('Admin users fetch error:', error);
+    console.error('[Admin Users] Error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
-
-*/

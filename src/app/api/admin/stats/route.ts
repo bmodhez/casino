@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { executeAll } from '@/lib/d1';
+import { executeQuery } from '@/lib/d1';
 
 export async function GET() {
   try {
@@ -9,26 +9,29 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get all stats in parallel
-    const [usersResult, coinsResult, gamesResult] = await executeAll([
-      { sql: 'SELECT COUNT(*) as total, SUM(CASE WHEN banned = 0 THEN 1 ELSE 0 END) as active, SUM(CASE WHEN banned = 1 THEN 1 ELSE 0 END) as banned FROM User', params: [] },
-      { sql: 'SELECT SUM(coins) as totalCoins FROM User', params: [] },
-      { sql: 'SELECT COUNT(*) as totalGames, SUM(betAmount) as totalWagered, SUM(payout) as totalPayout FROM GameHistory', params: [] },
-    ]);
+    // Single optimized query to get all stats at once
+    const statsResult = await executeQuery(`
+      SELECT 
+        (SELECT COUNT(*) FROM User) as totalUsers,
+        (SELECT COUNT(*) FROM User WHERE banned = 0) as activeUsers,
+        (SELECT COUNT(*) FROM User WHERE banned = 1) as bannedUsers,
+        (SELECT COALESCE(SUM(coins), 0) FROM User) as totalCoinsInCirculation,
+        (SELECT COUNT(*) FROM GameHistory) as totalGamesPlayed,
+        (SELECT COALESCE(SUM(betAmount), 0) FROM GameHistory) as totalWagered,
+        (SELECT COALESCE(SUM(payout), 0) FROM GameHistory) as totalPayout
+    `, []);
 
-    const userStats = usersResult[0] || { total: 0, active: 0, banned: 0 };
-    const coinStats = coinsResult[0] || { totalCoins: 0 };
-    const gameStats = gamesResult[0] || { totalGames: 0, totalWagered: 0, totalPayout: 0 };
+    const stats = statsResult.results?.[0] || {
+      totalUsers: 0,
+      activeUsers: 0,
+      bannedUsers: 0,
+      totalCoinsInCirculation: 0,
+      totalGamesPlayed: 0,
+      totalWagered: 0,
+      totalPayout: 0,
+    };
 
-    return NextResponse.json({
-      totalUsers: userStats.total || 0,
-      activeUsers: userStats.active || 0,
-      bannedUsers: userStats.banned || 0,
-      totalCoinsInCirculation: coinStats.totalCoins || 0,
-      totalGamesPlayed: gameStats.totalGames || 0,
-      totalWagered: gameStats.totalWagered || 0,
-      totalPayout: gameStats.totalPayout || 0,
-    });
+    return NextResponse.json(stats);
   } catch (error) {
     console.error('[Admin Stats] Error:', error);
     return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 });
