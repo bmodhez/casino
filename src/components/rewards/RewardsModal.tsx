@@ -21,6 +21,12 @@ const DAILY_REWARDS = [
   { day: 7, amount: 100, label: 'Day 7' },
 ];
 
+// Calculate reward amount for any day number (repeating cycle)
+function getRewardForDay(dayNumber: number) {
+  const cycleDay = ((dayNumber - 1) % 7) + 1; // Maps day 8 to day 1, day 9 to day 2, etc.
+  return DAILY_REWARDS.find(r => r.day === cycleDay)?.amount || 10;
+}
+
 const WHEEL_SEGMENTS = [
   { amount: 5, color: '#3b82f6' },
   { amount: 10, color: '#10b981' },
@@ -278,15 +284,19 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
                 </div>
 
                 <div className="grid grid-cols-7 gap-2">
-                  {DAILY_REWARDS.map((reward) => {
-                    const isClaimed = claimedDays.includes(reward.day);
-                    const isAvailable = reward.day === currentStreak + 1 && canClaimToday && !claiming;
-                    const isJustClaimed = justClaimed === reward.day;
+                  {/* Show next 7 days starting from current streak */}
+                  {Array.from({ length: 7 }, (_, i) => {
+                    const dayNumber = currentStreak + i + 1;
+                    const cycleDay = ((dayNumber - 1) % 7) + 1;
+                    const reward = DAILY_REWARDS.find(r => r.day === cycleDay);
+                    const isClaimed = i === 0 && !canClaimToday; // Only first day can be claimed
+                    const isAvailable = i === 0 && canClaimToday && !claiming;
+                    const isJustClaimed = justClaimed === dayNumber;
 
                     return (
                       <motion.button
-                        key={reward.day}
-                        onClick={() => claimDailyReward(reward.day)}
+                        key={dayNumber}
+                        onClick={() => isAvailable && claimDailyReward(dayNumber)}
                         disabled={!isAvailable || isClaimed || claiming}
                         whileHover={isAvailable ? { scale: 1.05 } : {}}
                         whileTap={isAvailable ? { scale: 0.95 } : {}}
@@ -303,9 +313,9 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
                             : 'bg-white/5 border border-white/10 opacity-50'
                         }`}
                       >
-                        <div className="text-xs text-slate-400 font-medium">{reward.label}</div>
+                        <div className="text-xs text-slate-400 font-medium">Day {dayNumber}</div>
                         <Coins className={`w-5 h-5 ${isClaimed ? 'text-emerald-400' : 'text-amber-400'}`} />
-                        <div className="text-xs font-bold text-white">{reward.amount}</div>
+                        <div className="text-xs font-bold text-white">{reward?.amount}</div>
                         {isClaimed && (
                           <motion.div
                             initial={{ scale: 0 }}
@@ -322,7 +332,7 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
                             exit={{ opacity: 0 }}
                             className="absolute text-2xl font-bold text-emerald-400"
                           >
-                            +{reward.amount}
+                            +{reward?.amount}
                           </motion.div>
                         )}
                       </motion.button>

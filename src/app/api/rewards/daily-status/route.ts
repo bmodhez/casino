@@ -1,14 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { executeQuery } from '@/lib/d1';
-
-function getWeekStart(date: Date): Date {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  const day = d.getDay();
-  const diff = d.getDate() - day;
-  return new Date(d.setDate(diff));
-}
+import { executeQuery, executeOne } from '@/lib/d1';
 
 export async function GET() {
   try {
@@ -19,31 +11,30 @@ export async function GET() {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const weekStart = getWeekStart(today);
 
-    // Get all claimed days for current week
-    const claimedStreaks = await executeQuery(
-      `SELECT day, claimedAt FROM DailyStreak 
-       WHERE userId = ? AND weekStart = ?
-       ORDER BY day ASC`,
-      [session.user.id, weekStart.toISOString()]
+    // Get total streak count (all claims)
+    const streakCount = await executeOne(
+      'SELECT COUNT(*) as count FROM DailyStreak WHERE userId = ?',
+      [session.user.id]
     );
 
-    const streaks = claimedStreaks?.results || [];
-    const claimedDays = streaks.map((s: any) => s.day);
-    const currentStreak = claimedDays.length;
+    const currentStreak = streakCount?.count || 0;
 
     // Check if user claimed today
-    const claimedToday = streaks.some((streak: any) => {
-      const claimDate = new Date(streak.claimedAt);
-      claimDate.setHours(0, 0, 0, 0);
-      return claimDate.getTime() === today.getTime();
-    });
+    const user = await executeOne(
+      'SELECT lastDailyClaimed FROM User WHERE id = ?',
+      [session.user.id]
+    );
 
-    const canClaimToday = !claimedToday;
+    let canClaimToday = true;
+    if (user?.lastDailyClaimed) {
+      const lastClaimed = new Date(user.lastDailyClaimed);
+      lastClaimed.setHours(0, 0, 0, 0);
+      canClaimToday = lastClaimed.getTime() !== today.getTime();
+    }
 
     return NextResponse.json({
-      claimedDays,
+      claimedDays: [], // Not needed for infinite streak
       currentStreak,
       canClaimToday,
     });

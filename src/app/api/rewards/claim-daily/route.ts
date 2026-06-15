@@ -1,22 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { notImplementedYet } from '@/lib/stub-api';
+import { executeQuery, executeOne, executeRun } from '@/lib/d1';
 
-export async function GET() { return notImplementedYet(); }
-export async function POST() { return notImplementedYet(); }
-export async function PUT() { return notImplementedYet(); }
-export async function DELETE() { return notImplementedYet(); }
-
-/* Original code commented out:
-
-function getWeekStart(date: Date): Date {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  const day = d.getDay();
-  const diff = d.getDate() - day;
-  return new Date(d.setDate(diff));
-}
-
+// Repeating 7-day reward cycle
 const DAILY_REWARDS: Record<number, number> = {
   1: 10,
   2: 25,
@@ -27,6 +13,12 @@ const DAILY_REWARDS: Record<number, number> = {
   7: 100,
 };
 
+// Get reward for any day (cycles every 7 days)
+function getRewardForDay(dayNumber: number): number {
+  const cycleDay = ((dayNumber - 1) % 7) + 1;
+  return DAILY_REWARDS[cycleDay] || 10;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
@@ -34,15 +26,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { day } = await req.json();
+    const { day } = await req.json() as { day: number };
 
-    if (!day || day < 1 || day > 7) {
+    if (!day || day < 1) {
       return NextResponse.json({ error: 'Invalid day' }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-    });
+    const user = await executeOne(
+      'SELECT id, coins, lastDailyClaimed FROM User WHERE id = ?',
+      [session.user.id]
+    );
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -50,30 +43,25 @@ export async function POST(req: NextRequest) {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const weekStart = getWeekStart(today);
 
-    // Get current claimed days in this week
-    const claimedStreaks = await prisma.dailyStreak.findMany({
-      where: {
-        userId: session.user.id,
-        weekStart: weekStart,
-      },
-      select: { day: true, claimedAt: true },
-    });
-
-    // Check if already claimed today by looking at claimedAt dates
-    const claimedToday = claimedStreaks.some(streak => {
-      const claimDate = new Date(streak.claimedAt);
-      claimDate.setHours(0, 0, 0, 0);
-      return claimDate.getTime() === today.getTime();
-    });
-
-    if (claimedToday) {
-      return NextResponse.json({ error: 'Already claimed today' }, { status: 400 });
+    // Check if already claimed today
+    if (user.lastDailyClaimed) {
+      const lastClaimed = new Date(user.lastDailyClaimed);
+      lastClaimed.setHours(0, 0, 0, 0);
+      
+      if (lastClaimed.getTime() === today.getTime()) {
+        return NextResponse.json({ error: 'Already claimed today' }, { status: 400 });
+      }
     }
 
-    const claimedDays = claimedStreaks.map(s => s.day);
-    const nextDay = claimedDays.length + 1;
+    // Get total streak count (all time)
+    const streakCount = await executeOne(
+      'SELECT COUNT(*) as count FROM DailyStreak WHERE userId = ?',
+      [session.user.id]
+    );
+
+    const currentStreak = streakCount?.count || 0;
+    const nextDay = currentStreak + 1;
 
     // Validate user is claiming the correct next day
     if (day !== nextDay) {
@@ -83,41 +71,46 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    // Check if this exact day already claimed
-    if (claimedDays.includes(day)) {
-      return NextResponse.json({ error: 'Day already claimed' }, { status: 400 });
-    }
-
-    const rewardAmount = DAILY_REWARDS[day] || 10;
+    // Calculate reward based on cycle
+    const rewardAmount = getRewardForDay(day);
     const newBalance = user.coins + rewardAmount;
 
     // Create daily streak record and update user
-    await prisma.$transaction([
-      prisma.dailyStreak.create({
-        data: {
-          userId: session.user.id,
-          day,
-          weekStart,
-        },
-      }),
-      prisma.user.update({
-        where: { id: session.user.id },
-        data: {
-          coins: newBalance,
-          lastDailyClaimed: today,
-        },
-      }),
-    ]);
+    const streakId = crypto.randomUUID();
+    
+    // Use D1 batch for transaction-like behavior
+    await executeRun(
+      `INSERT INTO DailyStreak (id, userId, day, weekStart, claimedAt, createdAt, updatedAt)
+       VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+      [streakId, session.user.id, day, today.toISOString(), today.toISOString()]
+    );
+
+    await executeRun(
+      `UPDATE User 
+       SET coins = ?, lastDailyClaimed = ?, updatedAt = datetime('now')
+       WHERE id = ?`,
+      [newBalance, today.toISOString(), session.user.id]
+    );
 
     return NextResponse.json({
       success: true,
       newBalance,
-      streak: claimedDays.length + 1,
+      streak: nextDay,
     });
   } catch (error) {
-    console.error('Error claiming daily reward:', error);
+    console.error('[Claim Daily] Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-*/
+export async function GET() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function PUT() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function DELETE() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}

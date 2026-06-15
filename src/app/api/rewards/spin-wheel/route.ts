@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { notImplementedYet } from '@/lib/stub-api';
-
-export async function GET() { return notImplementedYet(); }
-export async function POST() { return notImplementedYet(); }
-export async function PUT() { return notImplementedYet(); }
-export async function DELETE() { return notImplementedYet(); }
-
-/* Original code commented out:
+import { executeOne, executeRun } from '@/lib/d1';
 
 const WHEEL_SEGMENTS = [5, 10, 15, 20, 25, 30, 50, 75, 100, 150, 200];
 
@@ -18,10 +11,10 @@ export async function POST() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { coins: true, lastDailyClaimed: true },
-    });
+    const user = await executeOne(
+      'SELECT coins, lastDailyClaimed FROM User WHERE id = ?',
+      [session.user.id]
+    );
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -45,13 +38,12 @@ export async function POST() {
     // Update user balance and last spin time
     const newBalance = user.coins + amount;
 
-    await prisma.user.update({
-      where: { id: session.user.id },
-      data: {
-        coins: newBalance,
-        lastDailyClaimed: new Date(), // Track last spin time
-      },
-    });
+    await executeRun(
+      `UPDATE User 
+       SET coins = ?, lastDailyClaimed = ?, updatedAt = datetime('now')
+       WHERE id = ?`,
+      [newBalance, new Date().toISOString(), session.user.id]
+    );
 
     return NextResponse.json({
       success: true,
@@ -60,9 +52,19 @@ export async function POST() {
       newBalance,
     });
   } catch (error) {
-    console.error('[WHEEL] Error spinning wheel:', error);
+    console.error('[Wheel] Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-*/
+export async function GET() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function PUT() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function DELETE() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
