@@ -13,7 +13,7 @@ type CellState = 'hidden' | 'gem' | 'mine';
 
 interface ClickResponse {
   error?: string;
-  result: 'mine' | 'gem' | 'cashout';
+  result: 'mine' | 'gem' | 'safe' | 'cashout';
   minePositions: number[];
   gemsRevealed: number;
   multiplier: number;
