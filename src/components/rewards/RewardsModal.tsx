@@ -74,7 +74,7 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
         console.error('Daily status fetch failed:', res.status);
         return;
       }
-      const data = await res.json();
+      const data = await res.json() as { claimedDays?: number[]; currentStreak?: number; canClaimToday?: boolean };
       if (data.claimedDays) setClaimedDays(data.claimedDays);
       if (data.currentStreak !== undefined) setCurrentStreak(data.currentStreak);
       if (data.canClaimToday !== undefined) setCanClaimToday(data.canClaimToday);
@@ -90,7 +90,7 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
         console.error('Wheel status fetch failed:', res.status);
         return;
       }
-      const data = await res.json();
+      const data = await res.json() as { canSpin?: boolean; timeLeft?: number };
       if (data.canSpin !== undefined) {
         setCanSpin(data.canSpin);
         if (!data.canSpin && data.timeLeft) {
@@ -122,14 +122,14 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: 'Unknown error' }));
+        const data = await res.json().catch(() => ({ error: 'Unknown error' })) as { error: string };
         console.error('Claim failed:', data.error);
         alert(data.error || 'Failed to claim reward');
         setClaiming(false);
         return;
       }
 
-      const data = await res.json();
+      const data = await res.json() as { streak: number; newBalance: number };
       
       // Instant update
       setClaimedDays([...claimedDays, day]);
@@ -160,7 +160,7 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: 'Failed to spin wheel' }));
+        const data = await res.json().catch(() => ({ error: 'Failed to spin wheel' })) as { error: string };
         // Don't log cooldown messages as errors - this is expected behavior
         if (!data.error?.includes('24 hours')) {
           console.error('Spin failed:', data.error);
@@ -169,7 +169,7 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
         return;
       }
 
-      const data = await res.json();
+      const data = await res.json() as { segmentIndex: number; amount: number; newBalance: number };
       if (res.ok) {
         const segmentAngle = 360 / WHEEL_SEGMENTS.length;
         const targetIndex = data.segmentIndex;
