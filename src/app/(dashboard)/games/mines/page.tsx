@@ -14,11 +14,12 @@ type CellState = 'hidden' | 'gem' | 'mine';
 interface ClickResponse {
   error?: string;
   result: 'mine' | 'gem' | 'safe' | 'cashout';
-  minePositions: number[];
-  gemsRevealed: number;
-  multiplier: number;
-  coins: number;
-  payout: number;
+  position?: number;
+  minePositions?: number[];
+  gemsRevealed?: number;
+  multiplier?: number;
+  coins?: number;
+  payout?: number;
 }
 
 interface CashoutResponse {
@@ -151,28 +152,33 @@ export default function MinesPage() {
     const newPositions = [...minePositions];
 
     if (data.result === 'mine') {
-      data.minePositions.forEach((pos: number) => { newCells[pos] = 'mine'; });
-      setMinePositions(data.minePositions);
+      if (data.minePositions) {
+        data.minePositions.forEach((pos: number) => { newCells[pos] = 'mine'; });
+        setMinePositions(data.minePositions);
+      }
       setCells(newCells);
       setGameActive(false);
       setGameOver(true);
       setWon(false);
       setMsg('💥 You hit a mine!');
+      if (data.coins !== undefined) updateCoins(data.coins);
     } else if (data.result === 'safe' || data.result === 'gem') {
       newCells[index] = 'gem';
       setCells(newCells);
-      setGemsRevealed(data.gemsRevealed);
-      setMultiplier(data.multiplier);
+      if (data.gemsRevealed !== undefined) setGemsRevealed(data.gemsRevealed);
+      if (data.multiplier !== undefined) setMultiplier(data.multiplier);
     } else if (data.result === 'cashout') {
       newCells[index] = 'gem';
       setCells(newCells);
-      setGemsRevealed(data.gemsRevealed);
-      setMultiplier(data.multiplier);
-      updateCoins(data.coins);
+      if (data.gemsRevealed !== undefined) setGemsRevealed(data.gemsRevealed);
+      if (data.multiplier !== undefined) setMultiplier(data.multiplier);
+      if (data.coins !== undefined) updateCoins(data.coins);
       setGameActive(false);
       setGameOver(true);
       setWon(true);
-      setMsg(`🎉 Won ${formatCoins(data.payout)} coins! (${data.multiplier.toFixed(2)}x)`);
+      if (data.payout !== undefined) {
+        setMsg(`🎉 Won ${formatCoins(data.payout)} coins! (${data.multiplier?.toFixed(2) || 0}x)`);
+      }
     }
   }, [gameActive, gameOver, cells, cellLoading, minePositions, gemsRevealed, mineCount, betAmount, isAuthenticated, gameId, coins, updateCoins]);
 
