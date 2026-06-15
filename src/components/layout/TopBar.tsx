@@ -191,7 +191,7 @@ export function TopBar({ user }: TopBarProps) {
                         <User className="w-4 h-4" /> Profile
                       </Link>
                       {(displayUser as any)?.role === 'ADMIN' && (
-                        <Link href="/admin" onClick={() => setShowMenu(false)}
+                        <Link href="/bhavinmodhh" onClick={() => setShowMenu(false)}
                           className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-sm text-purple-400">
                           <Shield className="w-4 h-4" /> Admin Panel
                         </Link>
