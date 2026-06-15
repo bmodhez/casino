@@ -145,8 +145,8 @@ export function TopBar({ user }: TopBarProps) {
               </AnimatePresence>
             </div>
 
-            {/* User Menu - Desktop only (hidden on mobile) */}
-            <div className="relative hidden lg:block">
+            {/* User Menu - Desktop only (hidden below 1280px) */}
+            <div className="relative hidden xl:block">
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="flex items-center gap-2 glass px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-all"
@@ -192,8 +192,8 @@ export function TopBar({ user }: TopBarProps) {
               </AnimatePresence>
             </div>
 
-            {/* Profile Link - Mobile only */}
-            <Link href="/profile" className="lg:hidden">
+            {/* Profile Link - Mobile/Tablet only (below 1280px) */}
+            <Link href="/profile" className="xl:hidden">
               <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${rank.gradient} flex items-center justify-center text-sm font-bold text-white`}>
                 {((displayUser as any)?.username || displayUser?.name || 'U')[0].toUpperCase()}
               </div>
