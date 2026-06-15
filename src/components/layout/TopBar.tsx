@@ -146,7 +146,7 @@ export function TopBar({ user }: TopBarProps) {
             </div>
 
             {/* User Menu - Desktop only (hidden on mobile) */}
-            <div className="relative hidden md:block">
+            <div className="relative hidden lg:block">
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="flex items-center gap-2 glass px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-all"
@@ -193,7 +193,7 @@ export function TopBar({ user }: TopBarProps) {
             </div>
 
             {/* Profile Link - Mobile only */}
-            <Link href="/profile" className="md:hidden">
+            <Link href="/profile" className="lg:hidden">
               <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${rank.gradient} flex items-center justify-center text-sm font-bold text-white`}>
                 {((displayUser as any)?.username || displayUser?.name || 'U')[0].toUpperCase()}
               </div>
