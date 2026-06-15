@@ -208,6 +208,15 @@ export default function ProfilePage() {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
+        <p className="text-[var(--muted-foreground)] mt-4">Loading profile...</p>
+      </div>
+    );
+  }
+
   if (!profile) {
     return (
       <div className="text-center py-12">
