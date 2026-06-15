@@ -12,12 +12,12 @@ interface TopBarProps {
 }
 
 export function TopBar({ user }: TopBarProps) {
-  // Version: 2.0 - XL breakpoint fix for mobile dropdown
   const { data: session, status } = useSession();
   const { coins, level, updateCoins } = useGameStore();
   const [showMenu, setShowMenu] = useState(false);
   const [dailyLoading, setDailyLoading] = useState(false);
   const [dailyMsg, setDailyMsg] = useState('');
+  const [isDesktop, setIsDesktop] = useState(false);
   const rank = getRankFromLevel(level);
   const sessionUser = session?.user;
   const isAuthenticated = !!(user || (status === 'authenticated' && sessionUser));
@@ -31,6 +31,20 @@ export function TopBar({ user }: TopBarProps) {
       if (data.coins !== undefined) updateCoins(data.coins);
     }).catch(() => {});
   }, [updateCoins, isGuest]);
+
+  // Detect screen size for mobile/desktop - 1280px (xl breakpoint)
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1280);
+    };
+    
+    // Initial check
+    checkScreenSize();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const claimDaily = async () => {
     setDailyLoading(true);
@@ -146,59 +160,62 @@ export function TopBar({ user }: TopBarProps) {
               </AnimatePresence>
             </div>
 
-            {/* User Menu - Desktop only (hidden below 1280px) */}
-            <div className="relative hidden xl:block">
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="flex items-center gap-2 glass px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-all"
-              >
-                <div className={`w-7 h-7 rounded-full bg-gradient-to-br ${rank.gradient} flex items-center justify-center text-xs font-bold text-white flex-shrink-0`}>
-                  {((displayUser as any)?.username || displayUser?.name || 'U')[0].toUpperCase()}
-                </div>
-                <div className="hidden sm:block text-left">
-                  <div className="text-xs font-semibold text-white leading-none">{(displayUser as any)?.username || displayUser?.name}</div>
-                  <div className="text-xs mt-0.5" style={{ color: rank.color }}>{rank.name}</div>
-                </div>
-                <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${showMenu ? 'rotate-180' : ''}`} />
-              </button>
+            {/* User Menu - Desktop only (1280px+) */}
+            {isDesktop && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="flex items-center gap-2 glass px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-all"
+                >
+                  <div className={`w-7 h-7 rounded-full bg-gradient-to-br ${rank.gradient} flex items-center justify-center text-xs font-bold text-white flex-shrink-0`}>
+                    {((displayUser as any)?.username || displayUser?.name || 'U')[0].toUpperCase()}
+                  </div>
+                  <div className="hidden sm:block text-left">
+                    <div className="text-xs font-semibold text-white leading-none">{(displayUser as any)?.username || displayUser?.name}</div>
+                    <div className="text-xs mt-0.5" style={{ color: rank.color }}>{rank.name}</div>
+                  </div>
+                  <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${showMenu ? 'rotate-180' : ''}`} />
+                </button>
 
-              <AnimatePresence>
-                {showMenu && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-12 w-48 glass rounded-xl py-2 shadow-2xl shadow-black/50 z-50 border border-white/10"
-                  >
-                    <Link href="/profile" onClick={() => setShowMenu(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-sm text-slate-300 hover:text-white">
-                      <User className="w-4 h-4" /> Profile
-                    </Link>
-                    {(displayUser as any)?.role === 'ADMIN' && (
-                      <Link href="/admin" onClick={() => setShowMenu(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-sm text-purple-400">
-                        <Shield className="w-4 h-4" /> Admin Panel
+                <AnimatePresence>
+                  {showMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-12 w-48 glass rounded-xl py-2 shadow-2xl shadow-black/50 z-50 border border-white/10"
+                    >
+                      <Link href="/profile" onClick={() => setShowMenu(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-sm text-slate-300 hover:text-white">
+                        <User className="w-4 h-4" /> Profile
                       </Link>
-                    )}
-                    {/* Logout button - Desktop only */}
-                    <div className="border-t border-white/5 mt-1 pt-1">
-                      <button onClick={() => signOut({ callbackUrl: '/' })}
-                        className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors text-sm text-red-400 w-full">
-                        <LogOut className="w-4 h-4" /> Sign Out
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                      {(displayUser as any)?.role === 'ADMIN' && (
+                        <Link href="/admin" onClick={() => setShowMenu(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-sm text-purple-400">
+                          <Shield className="w-4 h-4" /> Admin Panel
+                        </Link>
+                      )}
+                      <div className="border-t border-white/5 mt-1 pt-1">
+                        <button onClick={() => signOut({ callbackUrl: '/' })}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors text-sm text-red-400 w-full">
+                          <LogOut className="w-4 h-4" /> Sign Out
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
 
             {/* Profile Link - Mobile/Tablet only (below 1280px) */}
-            <Link href="/profile" className="xl:hidden">
-              <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${rank.gradient} flex items-center justify-center text-sm font-bold text-white`}>
-                {((displayUser as any)?.username || displayUser?.name || 'U')[0].toUpperCase()}
-              </div>
-            </Link>
+            {!isDesktop && (
+              <Link href="/profile">
+                <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${rank.gradient} flex items-center justify-center text-sm font-bold text-white`}>
+                  {((displayUser as any)?.username || displayUser?.name || 'U')[0].toUpperCase()}
+                </div>
+              </Link>
+            )}
           </>
         )}
       </div>
