@@ -13,7 +13,7 @@ type CellState = 'hidden' | 'gem' | 'mine';
 
 interface ClickResponse {
   error?: string;
-  result: 'mine' | 'gem' | 'safe' | 'cashout';
+  result: 'mine' | 'safe' | 'cashout';
   position?: number;
   minePositions?: number[];
   gemsRevealed?: number;
@@ -144,6 +144,7 @@ export default function MinesPage() {
       body: JSON.stringify({ gameId, cellIndex: index }),
     });
     const data = await res.json() as ClickResponse;
+    console.log('[Mines Click] Response:', data); // DEBUG
     setCellLoading(null);
 
     if (!res.ok) { setMsg(data.error ?? 'Error'); return; }
@@ -162,7 +163,7 @@ export default function MinesPage() {
       setWon(false);
       setMsg('💥 You hit a mine!');
       if (data.coins !== undefined) updateCoins(data.coins);
-    } else if (data.result === 'safe' || data.result === 'gem') {
+    } else if (data.result === 'safe') {
       newCells[index] = 'gem';
       setCells(newCells);
       if (data.gemsRevealed !== undefined) setGemsRevealed(data.gemsRevealed);
