@@ -146,7 +146,7 @@ export function TopBar({ user }: TopBarProps) {
             </div>
 
             {/* User Menu - Desktop only (hidden on mobile) */}
-            <div className="relative hidden lg:block">
+            <div className="relative hidden md:block">
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="flex items-center gap-2 glass px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-all"
@@ -180,8 +180,8 @@ export function TopBar({ user }: TopBarProps) {
                         <Shield className="w-4 h-4" /> Admin Panel
                       </Link>
                     )}
-                    {/* Logout button - Desktop only (hidden on mobile) */}
-                    <div className="border-t border-white/5 mt-1 pt-1 hidden lg:block">
+                    {/* Logout button - Desktop only */}
+                    <div className="border-t border-white/5 mt-1 pt-1">
                       <button onClick={() => signOut({ callbackUrl: '/' })}
                         className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors text-sm text-red-400 w-full">
                         <LogOut className="w-4 h-4" /> Sign Out
@@ -193,7 +193,7 @@ export function TopBar({ user }: TopBarProps) {
             </div>
 
             {/* Profile Link - Mobile only */}
-            <Link href="/profile" className="lg:hidden">
+            <Link href="/profile" className="md:hidden">
               <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${rank.gradient} flex items-center justify-center text-sm font-bold text-white`}>
                 {((displayUser as any)?.username || displayUser?.name || 'U')[0].toUpperCase()}
               </div>
