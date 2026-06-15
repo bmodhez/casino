@@ -113,8 +113,8 @@ export async function POST(req: NextRequest) {
     // Use D1 batch for transaction-like behavior
     try {
       await executeRun(
-        `INSERT INTO DailyStreak (id, userId, day, weekStart, claimedAt, createdAt, updatedAt)
-         VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+        `INSERT INTO DailyStreak (id, userId, day, weekStart, claimedAt)
+         VALUES (?, ?, ?, ?, ?)`,
         [streakId, session.user.id, day, todayStr, todayStr]
       );
 
