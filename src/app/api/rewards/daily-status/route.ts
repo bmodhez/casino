@@ -14,7 +14,8 @@ export async function GET() {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    console.log('[Daily Status] Today date:', today.toISOString());
+    const todayStr = today.toISOString().split('T')[0];
+    console.log('[Daily Status] Today date:', todayStr);
 
     // Get total streak count (all claims)
     const streakCount = await executeOne(
@@ -37,7 +38,8 @@ export async function GET() {
     if (user?.lastDailyClaimed) {
       const lastClaimed = new Date(user.lastDailyClaimed);
       lastClaimed.setHours(0, 0, 0, 0);
-      canClaimToday = lastClaimed.getTime() !== today.getTime();
+      const lastClaimedStr = lastClaimed.toISOString().split('T')[0];
+      canClaimToday = lastClaimedStr !== todayStr;
       console.log('[Daily Status] Can claim today:', canClaimToday);
     }
 

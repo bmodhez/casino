@@ -53,15 +53,18 @@ export async function POST(req: NextRequest) {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    console.log('[Claim Daily] Today date:', today.toISOString());
+    // Format date as YYYY-MM-DD for SQLite compatibility
+    const todayStr = today.toISOString().split('T')[0];
+    console.log('[Claim Daily] Today date:', todayStr);
 
     // Check if already claimed today
     if (user.lastDailyClaimed) {
       const lastClaimed = new Date(user.lastDailyClaimed);
       lastClaimed.setHours(0, 0, 0, 0);
-      console.log('[Claim Daily] Last claimed date:', lastClaimed.toISOString());
+      const lastClaimedStr = lastClaimed.toISOString().split('T')[0];
+      console.log('[Claim Daily] Last claimed date:', lastClaimedStr);
       
-      if (lastClaimed.getTime() === today.getTime()) {
+      if (lastClaimedStr === todayStr) {
         console.log('[Claim Daily] Already claimed today');
         return NextResponse.json({ error: 'Already claimed today' }, { status: 400 });
       }
@@ -112,7 +115,7 @@ export async function POST(req: NextRequest) {
       await executeRun(
         `INSERT INTO DailyStreak (id, userId, day, weekStart, claimedAt, createdAt, updatedAt)
          VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        [streakId, session.user.id, day, today.toISOString(), today.toISOString()]
+        [streakId, session.user.id, day, todayStr, todayStr]
       );
 
       console.log('[Claim Daily] Streak record created');
@@ -121,7 +124,7 @@ export async function POST(req: NextRequest) {
         `UPDATE User 
          SET coins = ?, lastDailyClaimed = ?, updatedAt = datetime('now')
          WHERE id = ?`,
-        [newBalance, today.toISOString(), session.user.id]
+        [newBalance, todayStr, session.user.id]
       );
 
       console.log('[Claim Daily] User updated successfully');
