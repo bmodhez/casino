@@ -305,27 +305,6 @@ export default function MinesPage() {
               )}
             </AnimatePresence>
           </div>
-
-          {/* Cashout button at bottom - DESKTOP ONLY */}
-          <AnimatePresence>
-            {gameActive && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="hidden lg:block"
-              >
-                <button
-                  onClick={cashOut}
-                  disabled={gemsRevealed === 0 || cellLoading !== null}
-                  className="btn-success w-full py-4 text-base font-bold shadow-lg shadow-emerald-500/20"
-                >
-                  {cellLoading === -1 ? 'Processing...' : `💰 Cash Out - ${formatCoins(potentialPayout)} (${displayMultiplier.toFixed(2)}x)`}
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
         {/* Controls */}
@@ -414,7 +393,26 @@ export default function MinesPage() {
                 {/* Tooltip for non-authenticated users */}
                 <AuthTooltip show={!isAuthenticated && showTooltip} position="top" />
               </div>
-            ) : null}
+            ) : (
+              /* Cashout button - DESKTOP ONLY (shown in sidebar) */
+              <AnimatePresence>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  className="hidden lg:block"
+                >
+                  <button
+                    onClick={cashOut}
+                    disabled={gemsRevealed === 0 || cellLoading !== null}
+                    className="btn-success w-full py-3 text-base font-bold shadow-lg shadow-emerald-500/20"
+                  >
+                    {cellLoading === -1 ? 'Processing...' : `💰 Cash Out - ${formatCoins(potentialPayout)} (${displayMultiplier.toFixed(2)}x)`}
+                  </button>
+                </motion.div>
+              </AnimatePresence>
+            )}
           </div>
         </div>
       </div>
