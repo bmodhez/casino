@@ -1,71 +1,86 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { notImplementedYet } from '@/lib/stub-api';
-
-export async function GET() { return notImplementedYet(); }
-export async function POST() { return notImplementedYet(); }
-export async function PUT() { return notImplementedYet(); }
-export async function DELETE() { return notImplementedYet(); }
-
-/* Original code commented out:
+import { executeOne, executeQuery } from '@/lib/d1';
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: {
-      id: true, username: true, email: true, image: true,
-      coins: true, xp: true, level: true,
-      lastDailyClaimed: true, createdAt: true, role: true,
-      gameHistory: {
-        orderBy: { createdAt: 'desc' },
-        take: 10,
-        select: { gameType: true, betAmount: true, payout: true, win: true, multiplier: true, createdAt: true },
-      },
-      _count: { select: { gameHistory: true } },
-    },
-  });
+    // Get user data
+    const user = await executeOne(
+      `SELECT id, username, email, image, coins, xp, level, lastDailyClaimed, createdAt, role, banned
+       FROM User WHERE id = ?`,
+      [session.user.id]
+    );
 
-  if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    if (!user) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
 
-  // Calculate stats
-  const wins = await prisma.gameHistory.count({ where: { userId: session.user.id, win: true } });
-  
-  const stats = await prisma.gameHistory.aggregate({
-    where: { userId: session.user.id },
-    _sum: {
-      betAmount: true,
-      payout: true,
-    },
-  });
+    // Count total games
+    const gamesCount = await executeOne(
+      'SELECT COUNT(*) as count FROM GameHistory WHERE userId = ?',
+      [session.user.id]
+    );
 
-  // Calculate user's rank based on coins
-  const usersWithMoreCoins = await prisma.user.count({
-    where: {
-      coins: {
-        gt: user.coins,
-      },
-      banned: false,
-    },
-  });
-  
-  const rank = usersWithMoreCoins + 1; // +1 because count gives users above, rank is position
+    // Count wins
+    const winsCount = await executeOne(
+      'SELECT COUNT(*) as count FROM GameHistory WHERE userId = ? AND win = 1',
+      [session.user.id]
+    );
 
-  return NextResponse.json({
-    username: user.username,
-    email: user.email,
-    coins: user.coins,
-    xp: user.xp,
-    level: user.level,
-    createdAt: user.createdAt,
-    totalGamesPlayed: user._count.gameHistory,
-    totalWins: wins,
-    totalWagered: stats._sum.betAmount || 0,
-    totalPayout: stats._sum.payout || 0,
-    rank: rank,
-  });
+    // Calculate total wagered and payout
+    const stats = await executeOne(
+      `SELECT 
+        COALESCE(SUM(betAmount), 0) as totalWagered,
+        COALESCE(SUM(payout), 0) as totalPayout
+       FROM GameHistory WHERE userId = ?`,
+      [session.user.id]
+    );
+
+    // Calculate user's rank based on coins
+    const rankQuery = await executeOne(
+      `SELECT COUNT(*) as count 
+       FROM User 
+       WHERE coins > ? AND banned = 0`,
+      [user.coins]
+    );
+
+    const rank = (rankQuery?.count || 0) + 1;
+
+    return NextResponse.json({
+      username: user.username,
+      email: user.email,
+      coins: user.coins,
+      xp: user.xp,
+      level: user.level,
+      createdAt: user.createdAt,
+      totalGamesPlayed: gamesCount?.count || 0,
+      totalWins: winsCount?.count || 0,
+      totalWagered: stats?.totalWagered || 0,
+      totalPayout: stats?.totalPayout || 0,
+      rank: rank,
+    });
+  } catch (error: any) {
+    console.error('[Profile] Error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch profile' },
+      { status: 500 }
+    );
+  }
 }
 
-*/
+export async function POST() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function PUT() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function DELETE() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
