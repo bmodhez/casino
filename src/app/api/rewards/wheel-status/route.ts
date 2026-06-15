@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { notImplementedYet } from '@/lib/stub-api';
-
-export async function GET() { return notImplementedYet(); }
-export async function POST() { return notImplementedYet(); }
-export async function PUT() { return notImplementedYet(); }
-export async function DELETE() { return notImplementedYet(); }
-
-/* Original code commented out:
+import { executeOne } from '@/lib/d1';
 
 export async function GET() {
   try {
@@ -16,10 +9,10 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { lastDailyClaimed: true },
-    });
+    const user = await executeOne(
+      'SELECT lastDailyClaimed FROM User WHERE id = ?',
+      [session.user.id]
+    );
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -28,8 +21,7 @@ export async function GET() {
     let canSpin = true;
     let timeLeft = 0;
 
-    // Temporarily using lastDailyClaimed to track wheel spins
-    // In production, add a separate lastWheelSpin field
+    // Using lastDailyClaimed to track wheel spins
     if (user.lastDailyClaimed) {
       const lastSpinDate = new Date(user.lastDailyClaimed);
       const now = new Date();
@@ -46,9 +38,19 @@ export async function GET() {
       timeLeft,
     });
   } catch (error) {
-    console.error('Error in wheel-status:', error);
+    console.error('[Wheel Status] Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-*/
+export async function POST() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function PUT() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function DELETE() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}

@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { notImplementedYet } from '@/lib/stub-api';
-
-export async function GET() { return notImplementedYet(); }
-export async function POST() { return notImplementedYet(); }
-export async function PUT() { return notImplementedYet(); }
-export async function DELETE() { return notImplementedYet(); }
-
-/* Original code commented out:
+import { executeQuery } from '@/lib/d1';
 
 function getWeekStart(date: Date): Date {
   const d = new Date(date);
@@ -29,20 +22,19 @@ export async function GET() {
     const weekStart = getWeekStart(today);
 
     // Get all claimed days for current week
-    const claimedStreaks = await prisma.dailyStreak.findMany({
-      where: {
-        userId: session.user.id,
-        weekStart: weekStart,
-      },
-      select: { day: true, claimedAt: true },
-      orderBy: { day: 'asc' },
-    });
+    const claimedStreaks = await executeQuery(
+      `SELECT day, claimedAt FROM DailyStreak 
+       WHERE userId = ? AND weekStart = ?
+       ORDER BY day ASC`,
+      [session.user.id, weekStart.toISOString()]
+    );
 
-    const claimedDays = claimedStreaks.map(s => s.day);
+    const streaks = claimedStreaks?.results || [];
+    const claimedDays = streaks.map((s: any) => s.day);
     const currentStreak = claimedDays.length;
 
-    // Check if user claimed today by looking at claimedAt dates
-    const claimedToday = claimedStreaks.some(streak => {
+    // Check if user claimed today
+    const claimedToday = streaks.some((streak: any) => {
       const claimDate = new Date(streak.claimedAt);
       claimDate.setHours(0, 0, 0, 0);
       return claimDate.getTime() === today.getTime();
@@ -56,9 +48,19 @@ export async function GET() {
       canClaimToday,
     });
   } catch (error) {
-    console.error('Error in daily-status:', error);
+    console.error('[Daily Status] Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-*/
+export async function POST() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function PUT() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
+
+export async function DELETE() { 
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 }); 
+}
