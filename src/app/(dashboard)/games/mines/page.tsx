@@ -225,7 +225,7 @@ export default function MinesPage() {
       <div className="grid lg:grid-cols-[1fr_280px] gap-6">
         {/* Game Grid */}
         <div className="space-y-4" ref={gameGridRef}>
-          {/* Cashout button at top - only show when game is active */}
+          {/* Cashout button at top - MOBILE ONLY */}
           <AnimatePresence>
             {gameActive && (
               <motion.div
@@ -233,6 +233,7 @@ export default function MinesPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ type: 'spring', stiffness: 300 }}
+                className="lg:hidden"
               >
                 <button
                   onClick={cashOut}
@@ -304,6 +305,27 @@ export default function MinesPage() {
               )}
             </AnimatePresence>
           </div>
+
+          {/* Cashout button at bottom - DESKTOP ONLY */}
+          <AnimatePresence>
+            {gameActive && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="hidden lg:block"
+              >
+                <button
+                  onClick={cashOut}
+                  disabled={gemsRevealed === 0 || cellLoading !== null}
+                  className="btn-success w-full py-4 text-base font-bold shadow-lg shadow-emerald-500/20"
+                >
+                  {cellLoading === -1 ? 'Processing...' : `💰 Cash Out - ${formatCoins(potentialPayout)} (${displayMultiplier.toFixed(2)}x)`}
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Controls */}
