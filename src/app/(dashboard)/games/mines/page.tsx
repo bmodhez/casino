@@ -158,7 +158,7 @@ export default function MinesPage() {
       setGameOver(true);
       setWon(false);
       setMsg('💥 You hit a mine!');
-    } else if (data.result === 'gem') {
+    } else if (data.result === 'safe' || data.result === 'gem') {
       newCells[index] = 'gem';
       setCells(newCells);
       setGemsRevealed(data.gemsRevealed);
