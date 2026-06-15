@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Home, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
+import { Home, RefreshCw, AlertTriangle } from 'lucide-react';
 
 export default function GlobalError({
   error,
@@ -11,131 +12,102 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Global error:', error);
+    // Log error for monitoring (in production, send to logging service)
+    console.error('Global error caught:', error);
   }, [error]);
 
   return (
-    <html>
+    <html lang="en">
       <body style={{ 
         margin: 0, 
         padding: 0, 
-        backgroundColor: '#0a0a0f',
+        backgroundColor: '#0c101a',
+        color: 'white',
         fontFamily: 'system-ui, -apple-system, sans-serif',
-        color: '#fff'
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
-        <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px'
-        }}>
-          <div style={{
-            maxWidth: '600px',
-            width: '100%',
-            textAlign: 'center'
+        <div style={{ textAlign: 'center', padding: '2rem', maxWidth: '600px' }}>
+          <div style={{ 
+            marginBottom: '2rem',
+            fontSize: '4rem'
           }}>
-            {/* Error Icon */}
-            <div style={{
-              fontSize: '80px',
-              marginBottom: '20px',
-              opacity: 0.5
-            }}>
-              ⚠️
-            </div>
+            ⚠️
+          </div>
+          
+          <h1 style={{ 
+            fontSize: '2rem', 
+            fontWeight: 'bold',
+            marginBottom: '1rem'
+          }}>
+            Oops! Something went wrong
+          </h1>
+          
+          <p style={{ 
+            color: '#94a3b8',
+            marginBottom: '2rem',
+            fontSize: '1.1rem'
+          }}>
+            We're experiencing a temporary issue. Your data is safe!
+          </p>
 
-            {/* Title */}
-            <h1 style={{
-              fontSize: '36px',
-              fontWeight: 'bold',
-              marginBottom: '16px'
-            }}>
-              Critical Error
-            </h1>
+          <div style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <button
+              onClick={reset}
+              style={{
+                padding: '0.75rem 1.5rem',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.75rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <span>🔄</span> Try Again
+            </button>
 
-            {/* Message */}
-            <p style={{
-              fontSize: '18px',
-              color: '#94a3b8',
-              marginBottom: '32px'
-            }}>
-              The application encountered a critical error and needs to restart.
+            <a 
+              href="/dashboard"
+              style={{
+                padding: '0.75rem 1.5rem',
+                backgroundColor: '#475569',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '0.75rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <span>🏠</span> Back to Home
+            </a>
+          </div>
+
+          <div style={{ 
+            marginTop: '3rem',
+            paddingTop: '2rem',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            fontSize: '0.875rem',
+            color: '#64748b'
+          }}>
+            <p>If this problem continues, please refresh the page</p>
+            <p style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>
+              Error ID: {error.digest || 'Unknown'}
             </p>
-
-            {/* Buttons */}
-            <div style={{
-              display: 'flex',
-              gap: '16px',
-              justifyContent: 'center',
-              flexWrap: 'wrap'
-            }}>
-              <button
-                onClick={reset}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 24px',
-                  backgroundColor: '#3b82f6',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3b82f6'}
-              >
-                <RefreshCw size={20} />
-                Restart Application
-              </button>
-
-              <a
-                href="/dashboard"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 24px',
-                  backgroundColor: '#475569',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <Home size={20} />
-                Go Home
-              </a>
-            </div>
-
-            {/* Error Details */}
-            {process.env.NODE_ENV === 'development' && error.message && (
-              <div style={{
-                marginTop: '32px',
-                padding: '16px',
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.2)',
-                borderRadius: '12px',
-                textAlign: 'left'
-              }}>
-                <p style={{
-                  fontSize: '14px',
-                  color: '#f87171',
-                  fontFamily: 'monospace',
-                  wordBreak: 'break-all',
-                  margin: 0
-                }}>
-                  {error.message}
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </body>
