@@ -1,10 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bomb, Dice5, CircleDot, LayoutDashboard, Triangle, User } from 'lucide-react';
+import { Bomb, Dice5, CircleDot, LayoutDashboard, Triangle, User, Gift } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { AuthModal } from '@/components/AuthModal';
+import { RewardsModal } from '@/components/rewards/RewardsModal';
 
 const mobileItems = [
   { label: 'Home', href: '/dashboard', icon: LayoutDashboard },
@@ -18,10 +19,12 @@ export function MobileNav() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showRewardsModal, setShowRewardsModal] = useState(false);
 
   return (
     <>
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <RewardsModal isOpen={showRewardsModal} onClose={() => setShowRewardsModal(false)} />
       <nav className="mobile-nav fixed bottom-0 left-0 right-0 z-40 pb-safe">
         <div className="w-full flex justify-center px-4 pb-4">
           {/* Glassmorphism pill container */}
@@ -58,6 +61,18 @@ export function MobileNav() {
                   </Link>
                 );
               })}
+              
+              {/* Rewards button - only show when logged in */}
+              {session && (
+                <button
+                  onClick={() => setShowRewardsModal(true)}
+                  className="relative flex flex-col items-center gap-1 py-2 px-2.5 rounded-full transition-all duration-300"
+                >
+                  <div className="relative z-10">
+                    <Gift className="w-5 h-5 text-amber-400 transition-all duration-300" />
+                  </div>
+                </button>
+              )}
               
               {/* Profile / Login button */}
               {session ? (
