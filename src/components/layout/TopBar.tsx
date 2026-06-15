@@ -180,7 +180,8 @@ export function TopBar({ user }: TopBarProps) {
                         <Shield className="w-4 h-4" /> Admin Panel
                       </Link>
                     )}
-                    <div className="border-t border-white/5 mt-1 pt-1">
+                    {/* Logout button - Desktop only (hidden on mobile) */}
+                    <div className="border-t border-white/5 mt-1 pt-1 hidden lg:block">
                       <button onClick={() => signOut({ callbackUrl: '/' })}
                         className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 transition-colors text-sm text-red-400 w-full">
                         <LogOut className="w-4 h-4" /> Sign Out

@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { 
   User, Mail, Calendar, Coins, Trophy, TrendingUp, 
-  Shield, Edit, Eye, EyeOff, Copy, Check, RefreshCw, Lock, Save, X
+  Shield, Edit, Eye, EyeOff, Copy, Check, RefreshCw, Lock, Save, X, LogOut
 } from 'lucide-react';
 import { useGameStore } from '@/store/useGameStore';
 import { formatCoins, getRankFromLevel } from '@/lib/utils';
@@ -428,7 +428,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Password Change */}
-        <div>
+        <div className="border-b border-white/5 pb-4 lg:border-b-0 lg:pb-0">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-slate-400" />
@@ -532,6 +532,17 @@ export default function ProfilePage() {
               <p className="text-slate-400 text-sm">••••••••</p>
             )}
           </AnimatePresence>
+        </div>
+
+        {/* Logout Button - Mobile only */}
+        <div className="lg:hidden pt-2">
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 transition-all text-red-400 font-medium"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </button>
         </div>
       </motion.div>
 
