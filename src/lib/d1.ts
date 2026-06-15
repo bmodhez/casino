@@ -46,3 +46,12 @@ export async function executeRun(sql: string, params: any[] = []) {
   const db = getD1();
   return await db.prepare(sql).bind(...params).run();
 }
+
+// Execute multiple queries in batch
+export async function executeAll(queries: { sql: string; params: any[] }[]) {
+  const db = getD1();
+  const results = await db.batch(
+    queries.map(q => db.prepare(q.sql).bind(...q.params))
+  );
+  return results.map((r: any) => r.results);
+}
