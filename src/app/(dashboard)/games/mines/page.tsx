@@ -137,51 +137,91 @@ export default function MinesPage() {
       return;
     }
 
+    console.log('[Mines] Clicking cell:', index);
+    console.log('[Mines] Current cells state:', cells);
     setCellLoading(index);
-    const res = await fetch('/api/games/mines/click', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gameId, cellIndex: index }),
-    });
-    const data = await res.json() as ClickResponse;
-    console.log('[Mines Click] Response:', data); // DEBUG
-    setCellLoading(null);
+    
+    try {
+      const res = await fetch('/api/games/mines/click', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId, cellIndex: index }),
+      });
+      
+      const data = await res.json() as ClickResponse;
+      console.log('[Mines] API Response:', {
+        status: res.status,
+        ok: res.ok,
+        data: data
+      });
 
-    if (!res.ok) { setMsg(data.error ?? 'Error'); return; }
-
-    const newCells = [...cells];
-    const newPositions = [...minePositions];
-
-    if (data.result === 'mine') {
-      if (data.minePositions) {
-        data.minePositions.forEach((pos: number) => { newCells[pos] = 'mine'; });
-        setMinePositions(data.minePositions);
+      if (!res.ok) { 
+        setCellLoading(null);
+        setMsg(data.error ?? 'Error'); 
+        return; 
       }
-      setCells(newCells);
-      setGameActive(false);
-      setGameOver(true);
-      setWon(false);
-      setMsg('💥 You hit a mine!');
-      if (data.coins !== undefined) updateCoins(data.coins);
-    } else if (data.result === 'safe') {
-      newCells[index] = 'gem';
-      setCells(newCells);
-      if (data.gemsRevealed !== undefined) setGemsRevealed(data.gemsRevealed);
-      if (data.multiplier !== undefined) setMultiplier(data.multiplier);
-    } else if (data.result === 'cashout') {
-      newCells[index] = 'gem';
-      setCells(newCells);
-      if (data.gemsRevealed !== undefined) setGemsRevealed(data.gemsRevealed);
-      if (data.multiplier !== undefined) setMultiplier(data.multiplier);
-      if (data.coins !== undefined) updateCoins(data.coins);
-      setGameActive(false);
-      setGameOver(true);
-      setWon(true);
-      if (data.payout !== undefined) {
-        setMsg(`🎉 Won ${formatCoins(data.payout)} coins! (${data.multiplier?.toFixed(2) || 0}x)`);
+
+      // Create new cells array - CRITICAL: Must create fresh array
+      const updatedCells = cells.map((cell, i) => i === index ? cell : cell);
+      
+      // Update cells immediately based on result - Stake style
+      if (data.result === 'mine') {
+        console.log('[Mines] Hit mine! Revealing all mines:', data.minePositions);
+        // Show all mines when hit
+        if (data.minePositions && data.minePositions.length > 0) {
+          data.minePositions.forEach((pos: number) => {
+            updatedCells[pos] = 'mine';
+          });
+          setMinePositions(data.minePositions);
+        }
+        setCells(updatedCells);
+        console.log('[Mines] Updated cells after mine hit:', updatedCells);
+        setCellLoading(null);
+        setGameActive(false);
+        setGameOver(true);
+        setWon(false);
+        setMsg('💥 You hit a mine!');
+        if (data.coins !== undefined) updateCoins(data.coins);
+      } else if (data.result === 'safe') {
+        console.log('[Mines] Revealed gem at index:', index);
+        // Reveal gem immediately
+        updatedCells[index] = 'gem';
+        setCells(updatedCells);
+        console.log('[Mines] Updated cells after gem reveal:', updatedCells);
+        setCellLoading(null);
+        
+        // Update stats
+        if (data.gemsRevealed !== undefined) {
+          console.log('[Mines] Gems revealed:', data.gemsRevealed);
+          setGemsRevealed(data.gemsRevealed);
+        }
+        if (data.multiplier !== undefined) {
+          console.log('[Mines] Multiplier:', data.multiplier);
+          setMultiplier(data.multiplier);
+        }
+      } else if (data.result === 'cashout') {
+        console.log('[Mines] Auto cashout triggered');
+        updatedCells[index] = 'gem';
+        setCells(updatedCells);
+        console.log('[Mines] Updated cells after cashout:', updatedCells);
+        setCellLoading(null);
+        
+        if (data.gemsRevealed !== undefined) setGemsRevealed(data.gemsRevealed);
+        if (data.multiplier !== undefined) setMultiplier(data.multiplier);
+        if (data.coins !== undefined) updateCoins(data.coins);
+        setGameActive(false);
+        setGameOver(true);
+        setWon(true);
+        if (data.payout !== undefined) {
+          setMsg(`🎉 Won ${formatCoins(data.payout)} coins! (${data.multiplier?.toFixed(2) || 0}x)`);
+        }
       }
+    } catch (error) {
+      console.error('[Mines] Error:', error);
+      setCellLoading(null);
+      setMsg('Network error');
     }
-  }, [gameActive, gameOver, cells, cellLoading, minePositions, gemsRevealed, mineCount, betAmount, isAuthenticated, gameId, coins, updateCoins]);
+  }, [gameActive, gameOver, cells, cellLoading, minePositions, isAuthenticated, gameId, updateCoins]);
 
   const cashOut = useCallback(async () => {
     if (!gameActive || gemsRevealed === 0 || cellLoading !== null) return;
