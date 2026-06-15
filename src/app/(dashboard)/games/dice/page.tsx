@@ -119,8 +119,8 @@ export default function DicePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ betAmount, target, overUnder }),
       });
-      const data = await res.json();
-      if (!res.ok) { setMsg(data.error); setRolling(false); return; }
+      const data = await res.json() as RollResult & { error?: string };
+      if (!res.ok) { setMsg(data.error ?? 'Error'); setRolling(false); return; }
 
       updateCoins(data.coins);
       setTimeout(() => {

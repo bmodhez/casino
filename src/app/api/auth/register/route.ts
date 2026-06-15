@@ -87,9 +87,11 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.error('Registration error:', error);
+    console.error('[Registration] Error:', error);
+    console.error('[Registration] Error stack:', error?.stack);
+    console.error('[Registration] Error message:', error?.message);
     return NextResponse.json(
-      { error: 'An unexpected error occurred during registration' },
+      { error: 'An unexpected error occurred during registration', details: error?.message },
       { status: 500 }
     );
   }

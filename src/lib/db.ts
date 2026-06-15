@@ -1,33 +1,21 @@
-import { PrismaClient } from '@prisma/client';
-import { PrismaD1 } from '@prisma/adapter-d1';
+// Prisma is NOT used in production - we use D1 raw SQL instead
+// This file is kept for backward compatibility only
 
-// Cache for Prisma client
-let cachedPrisma: PrismaClient | null = null;
+// DO NOT import PrismaClient in production code
+// Use executeQuery, executeOne, executeRun from @/lib/d1 instead
 
-export function getDB(d1?: any): PrismaClient {
-  // Return cached client if available
-  if (cachedPrisma) {
-    return cachedPrisma;
-  }
+export const prisma = new Proxy({} as any, {
+  get() {
+    throw new Error(
+      'Prisma Client is not available in Cloudflare Workers. ' +
+      'Use D1 raw SQL queries via executeQuery, executeOne, or executeRun from @/lib/d1'
+    );
+  },
+});
 
-  // If D1 binding is provided, use it
-  if (d1) {
-    const adapter = new PrismaD1(d1);
-    cachedPrisma = new PrismaClient({ 
-      adapter,
-      log: ['error'],
-    });
-    return cachedPrisma;
-  }
-
-  // Fallback: create client without adapter (for build time)
-  cachedPrisma = new PrismaClient({
-    log: ['error'],
-  });
-  
-  return cachedPrisma;
+export function getDB(): any {
+  throw new Error(
+    'getDB() is not available in Cloudflare Workers. ' +
+    'Use D1 raw SQL queries via executeQuery, executeOne, or executeRun from @/lib/d1'
+  );
 }
-
-// For Next.js API routes that need access to DB
-// They should use getDB() instead of importing prisma directly
-export const prisma = getDB();

@@ -39,7 +39,7 @@ export default function LeaderboardPage() {
     fetch(`/api/leaderboard?period=${period}`)
       .then(r => {
         if (!r.ok) throw new Error('Failed to fetch leaderboard');
-        return r.json();
+        return r.json() as Promise<LeaderboardUser[]>;
       })
       .then(data => { setUsers(data); setLoading(false); })
       .catch(() => setLoading(false));
@@ -61,7 +61,7 @@ export default function LeaderboardPage() {
         fetch(`/api/leaderboard?period=${period}`)
           .then(r => {
             if (!r.ok) throw new Error('Failed to fetch leaderboard');
-            return r.json();
+            return r.json() as Promise<LeaderboardUser[]>;
           })
           .then(data => { setUsers(data); setLoading(false); })
           .catch(() => setLoading(false));

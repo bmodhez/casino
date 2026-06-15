@@ -11,6 +11,23 @@ import { AuthTooltip } from '@/components/AuthTooltip';
 
 type CellState = 'hidden' | 'gem' | 'mine';
 
+interface ClickResponse {
+  error?: string;
+  result: 'mine' | 'gem' | 'cashout';
+  minePositions: number[];
+  gemsRevealed: number;
+  multiplier: number;
+  coins: number;
+  payout: number;
+}
+
+interface CashoutResponse {
+  error?: string;
+  coins: number;
+  payout: number;
+  multiplier: number;
+}
+
 export default function MinesPage() {
   const { coins, updateCoins } = useGameStore();
   const { requireAuth, showModal, setShowModal, isAuthenticated } = useAuthGuard();
@@ -91,8 +108,8 @@ export default function MinesPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ betAmount, mineCount }),
     });
-    const data = await res.json();
-    if (!res.ok) { setMsg(data.error); setLoading(false); return; }
+    const data = await res.json() as { error?: string; gameId: string; minePositions: number[] };
+    if (!res.ok) { setMsg(data.error ?? 'Error'); setLoading(false); return; }
 
     setGameId(data.gameId);
     setMinePositions(data.minePositions);
@@ -120,10 +137,10 @@ export default function MinesPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ gameId, cellIndex: index }),
     });
-    const data = await res.json();
+    const data = await res.json() as ClickResponse;
     setCellLoading(null);
 
-    if (!res.ok) { setMsg(data.error); return; }
+    if (!res.ok) { setMsg(data.error ?? 'Error'); return; }
 
     const newCells = [...cells];
     const newPositions = [...minePositions];
@@ -168,10 +185,10 @@ export default function MinesPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ gameId }),
     });
-    const data = await res.json();
+    const data = await res.json() as CashoutResponse;
     setCellLoading(null);
 
-    if (!res.ok) { setMsg(data.error); return; }
+    if (!res.ok) { setMsg(data.error ?? 'Error'); return; }
 
     updateCoins(data.coins);
     setGameActive(false);

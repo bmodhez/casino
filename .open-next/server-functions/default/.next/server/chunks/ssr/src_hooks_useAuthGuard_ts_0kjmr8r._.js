@@ -1,3 +1,0 @@
-module.exports=[59087,a=>{"use strict";var b=a.i(72131),c=a.i(18402);a.s(["useAuthGuard",0,function(){let{data:a,status:d}=(0,c.useSession)(),[e,f]=(0,b.useState)(!1),g="authenticated"===d&&!!a?.user;return{requireAuth:(0,b.useCallback)(()=>!!g||(f(!0),!1),[g]),showModal:e,setShowModal:f,isAuthenticated:g,isLoading:"loading"===d}}])}];
-
-//# sourceMappingURL=src_hooks_useAuthGuard_ts_0kjmr8r._.js.map

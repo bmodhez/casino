@@ -42,7 +42,7 @@ export default function AdminPage() {
           }
           throw new Error('Failed to fetch users');
         }
-        const data = await res.json();
+        const data = await res.json() as AdminUser[];
         setUsers(data);
       } catch (error) {
         console.error('Failed to load users:', error);

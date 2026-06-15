@@ -26,7 +26,7 @@ export function TopBar({ user }: TopBarProps) {
   useEffect(() => {
     if (isGuest) return;
     // Fetch live balance
-    fetch('/api/user/balance').then(r => r.json()).then(data => {
+    fetch('/api/user/balance').then(r => r.json() as Promise<{ coins: number }>).then(data => {
       if (data.coins !== undefined) updateCoins(data.coins);
     }).catch(() => {});
   }, [updateCoins, isGuest]);
@@ -35,7 +35,7 @@ export function TopBar({ user }: TopBarProps) {
     setDailyLoading(true);
     setDailyMsg('');
     const res = await fetch('/api/user/daily', { method: 'POST' });
-    const data = await res.json();
+    const data = await res.json() as { success: boolean; coins: number; reward: number; error?: string };
     if (data.success) {
       updateCoins(data.coins);
       setDailyMsg(`+${data.reward} coins!`);

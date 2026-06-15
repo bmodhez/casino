@@ -42,7 +42,7 @@ export function Sidebar() {
     fetch('/api/user/balance')
       .then(r => {
         if (!r.ok) throw new Error('Failed to fetch balance');
-        return r.json();
+        return r.json() as Promise<{ coins: number }>;
       })
       .then(data => {
         if (data.coins !== undefined) updateCoins(data.coins);
@@ -54,7 +54,7 @@ export function Sidebar() {
     setDailyLoading(true);
     setDailyMsg('');
     const res = await fetch('/api/user/daily', { method: 'POST' });
-    const data = await res.json();
+    const data = await res.json() as { success: boolean; coins: number; reward: number; error?: string };
     if (data.success) {
       updateCoins(data.coins);
       setDailyMsg(`+${data.reward} coins!`);

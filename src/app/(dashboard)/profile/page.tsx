@@ -68,8 +68,7 @@ export default function ProfilePage() {
         setLoading(false);
         return;
       }
-      const data = await res.json();
-      console.log('Profile data:', data); // Debug log
+      const data = await res.json() as UserProfile;
       if (data.username) {
         setProfile(data);
         setNewUsername(data.username);
@@ -89,7 +88,7 @@ export default function ProfilePage() {
         console.error('Seed fetch failed:', res.status);
         return;
       }
-      const data = await res.json();
+      const data = await res.json() as { activeSeed: any };
       if (data.activeSeed) {
         setSeedData(data.activeSeed);
       }
@@ -105,7 +104,7 @@ export default function ProfilePage() {
         console.error('Seed rotation failed:', res.status);
         return;
       }
-      const data = await res.json();
+      const data = await res.json() as { newSeed: any };
       if (data.newSeed) {
         setSeedData(data.newSeed);
       }
@@ -137,13 +136,13 @@ export default function ProfilePage() {
       });
       
       if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: 'Failed to update username' }));
+        const data = await res.json().catch(() => ({ error: 'Failed to update username' })) as { error: string };
         setUsernameMsg(data.error || 'Failed to update username');
         setUsernameLoading(false);
         return;
       }
 
-      const data = await res.json();
+      await res.json();
       setProfile({ ...profile!, username: newUsername });
       setEditingUsername(false);
       setUsernameMsg('Username updated successfully!');
@@ -177,13 +176,13 @@ export default function ProfilePage() {
       });
       
       if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: 'Failed to update password' }));
+        const data = await res.json().catch(() => ({ error: 'Failed to update password' })) as { error: string };
         setPasswordMsg(data.error || 'Failed to update password');
         setPasswordLoading(false);
         return;
       }
 
-      const data = await res.json();
+      await res.json();
       setEditingPassword(false);
       setCurrentPassword('');
       setNewPassword('');

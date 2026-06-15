@@ -6,14 +6,28 @@ type D1Database = any;
 // Get D1 binding using proper OpenNext method
 export function getD1(): D1Database {
   try {
-    const { env } = getCloudflareContext();
-    if (!env?.DB) {
-      throw new Error('D1 binding (DB) not found in Cloudflare context');
+    const context = getCloudflareContext();
+    console.log('[D1] Context keys:', Object.keys(context || {}));
+    console.log('[D1] Env available:', !!context?.env);
+    console.log('[D1] DB binding available:', !!context?.env?.DB);
+    
+    if (!context) {
+      throw new Error('Cloudflare context not available');
     }
-    return env.DB;
+    
+    if (!context.env) {
+      throw new Error('Cloudflare env not available in context');
+    }
+    
+    if (!context.env.DB) {
+      console.error('[D1] Available env keys:', Object.keys(context.env));
+      throw new Error('D1 binding (DB) not found in env');
+    }
+    
+    return context.env.DB;
   } catch (error) {
-    console.error('Error getting D1 binding:', error);
-    throw new Error('D1 database not available - make sure DB binding is configured in wrangler.jsonc');
+    console.error('[D1] Error getting D1 binding:', error);
+    throw error;
   }
 }
 

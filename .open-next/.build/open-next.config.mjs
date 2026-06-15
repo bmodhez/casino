@@ -212,9 +212,8 @@ function resolveCdnInvalidation(value = "dummy") {
 
 // open-next.config.ts
 var open_next_config_default = defineCloudflareConfig({
-  // For best results consider enabling R2 caching
-  // See https://opennext.js.org/cloudflare/caching for more details
-  // incrementalCache: r2IncrementalCache
+  // Make D1 binding available to Next.js
+  // The binding name must match what's in wrangler.jsonc
 });
 export {
   open_next_config_default as default

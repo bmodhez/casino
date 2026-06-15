@@ -364,7 +364,7 @@ export default function PlinkoPage() {
         body: JSON.stringify({ betAmount, rows, risk }),
       });
       if (!res.ok) {
-        const err = await res.json();
+        const err = await res.json() as { error: string };
         setMsg(err.error === 'Insufficient coins' ? 'Insufficient coins' : err.error || 'Drop failed');
         setDropping(false);
         return;

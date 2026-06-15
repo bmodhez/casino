@@ -108,8 +108,8 @@ export default function CoinflipPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ betAmount, choice: chosenSide }),
       });
-      const data = await res.json();
-      if (!res.ok) { setMsg(data.error); setPhase('idle'); return; }
+      const data = await res.json() as FlipResult & { error?: string };
+      if (!res.ok) { setMsg(data.error ?? 'Error'); setPhase('idle'); return; }
 
       // Set result first so animation knows which direction to spin
       setResult(data);

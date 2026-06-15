@@ -1,3 +1,0 @@
-module.exports=[59087,a=>{"use strict";var b=a.i(72131),c=a.i(18402);a.s(["useAuthGuard",0,function(){let{data:a,status:d}=(0,c.useSession)(),[e,f]=(0,b.useState)(!1),g="authenticated"===d&&!!a?.user;return{requireAuth:(0,b.useCallback)(()=>!!g||(f(!0),!1),[g]),showModal:e,setShowModal:f,isAuthenticated:g,isLoading:"loading"===d}}])},24330,a=>{"use strict";let b=(0,a.i(64831).default)("history",[["path",{d:"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8",key:"1357e3"}],["path",{d:"M3 3v5h5",key:"1xhq8a"}],["path",{d:"M12 7v5l4 2",key:"1fdv2h"}]]);a.s(["History",0,b],24330)}];
-
-//# sourceMappingURL=_1ot9i-_._.js.map
