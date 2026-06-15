@@ -473,13 +473,21 @@ export default function PlinkoPage() {
       <AuthModal isOpen={showModal} onClose={() => setShowModal(false)} />
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 min-h-[calc(100vh-100px)]">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-600/20 border border-pink-500/30 flex items-center justify-center shadow-lg shadow-pink-500/20 p-2">
-            <img src="/plinko-removebg-preview.png" alt="Plinko" className="w-full h-full object-contain" />
+        <div className="flex items-center justify-between gap-3 mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-600/20 border border-pink-500/30 flex items-center justify-center shadow-lg shadow-pink-500/20 p-2">
+              <img src="/plinko-removebg-preview.png" alt="Plinko" className="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-white">Plinko</h1>
+              <p className="text-xs text-slate-500">Drop the ball, hit multipliers</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-white">Plinko</h1>
-            <p className="text-xs text-slate-500">Drop the ball, hit multipliers</p>
+          
+          {/* Balance display - Mobile only */}
+          <div className="lg:hidden flex items-center gap-2 glass rounded-xl px-4 py-2">
+            <Triangle className="w-5 h-5 text-yellow-400" />
+            <span className="font-bold text-yellow-400 font-mono text-sm">{formatCoins(coins)}</span>
           </div>
         </div>
 

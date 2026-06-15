@@ -144,13 +144,21 @@ export default function DicePage() {
     <div className="max-w-6xl mx-auto min-h-[calc(100vh-200px)]">
       <AuthModal isOpen={showModal} onClose={() => setShowModal(false)} />
 
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20 border border-blue-500/30 flex items-center justify-center shadow-lg p-2">
-          <img src="/dice-removebg-preview.png" alt="Dice" className="w-full h-full object-contain" />
+      <div className="flex items-center justify-between gap-3 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20 border border-blue-500/30 flex items-center justify-center shadow-lg p-2">
+            <img src="/dice-removebg-preview.png" alt="Dice" className="w-full h-full object-contain" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Dice</h1>
+            <p className="text-slate-400 text-sm">Roll over or under the target to win</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Dice</h1>
-          <p className="text-slate-400 text-sm">Roll over or under the target to win</p>
+        
+        {/* Balance display - Mobile only */}
+        <div className="lg:hidden flex items-center gap-2 glass rounded-xl px-4 py-2">
+          <Coins className="w-5 h-5 text-yellow-400" />
+          <span className="font-bold text-yellow-400 font-mono">{formatCoins(coins)}</span>
         </div>
       </div>
 

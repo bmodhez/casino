@@ -264,13 +264,21 @@ export default function MinesPage() {
         onClose={() => setShowModal(false)}
       />
 
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-600/20 border border-emerald-500/30 flex items-center justify-center shadow-lg p-2">
-          <img src="/mines-removebg-preview.png" alt="Mines" className="w-full h-full object-contain" />
+      <div className="flex items-center justify-between gap-3 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-600/20 border border-emerald-500/30 flex items-center justify-center shadow-lg p-2">
+            <img src="/mines-removebg-preview.png" alt="Mines" className="w-full h-full object-contain" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Mines</h1>
+            <p className="text-slate-400 text-sm">Reveal gems, avoid the mines</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Mines</h1>
-          <p className="text-slate-400 text-sm">Reveal gems, avoid the mines</p>
+        
+        {/* Balance display - Mobile only */}
+        <div className="lg:hidden flex items-center gap-2 glass rounded-xl px-4 py-2">
+          <Coins className="w-5 h-5 text-yellow-400" />
+          <span className="font-bold text-yellow-400 font-mono">{formatCoins(coins)}</span>
         </div>
       </div>
 
