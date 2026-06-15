@@ -57,8 +57,13 @@ export default function MinesPage() {
     };
   }, []);
   
-  // Auto scroll when game starts or ends
+  // Auto scroll when game starts or ends - MOBILE ONLY
   useEffect(() => {
+    // Check if mobile device (screen width < 1024px which is lg breakpoint)
+    const isMobile = window.innerWidth < 1024;
+    
+    if (!isMobile) return; // Skip auto-scroll on desktop
+    
     if (gameActive && gameGridRef.current) {
       // Scroll to top (grid) when game starts
       gameGridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -238,7 +243,7 @@ export default function MinesPage() {
                 <button
                   onClick={cashOut}
                   disabled={gemsRevealed === 0 || cellLoading !== null}
-                  className="btn-success w-full py-4 text-base font-bold shadow-lg shadow-emerald-500/20"
+                  className="btn-success w-full py-4 text-base font-bold shadow-lg shadow-emerald-500/20 whitespace-nowrap overflow-hidden text-ellipsis"
                 >
                   {cellLoading === -1 ? 'Processing...' : `💰 Cash Out - ${formatCoins(potentialPayout)} (${displayMultiplier.toFixed(2)}x)`}
                 </button>
@@ -406,7 +411,7 @@ export default function MinesPage() {
                   <button
                     onClick={cashOut}
                     disabled={gemsRevealed === 0 || cellLoading !== null}
-                    className="btn-success w-full py-3 text-base font-bold shadow-lg shadow-emerald-500/20"
+                    className="btn-success w-full py-3 text-base font-bold shadow-lg shadow-emerald-500/20 whitespace-nowrap overflow-hidden text-ellipsis"
                   >
                     {cellLoading === -1 ? 'Processing...' : `💰 Cash Out - ${formatCoins(potentialPayout)} (${displayMultiplier.toFixed(2)}x)`}
                   </button>
