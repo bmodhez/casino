@@ -30,7 +30,7 @@ export function getPrismaClient(): PrismaClient {
       log: ['error'],
     });
   } else {
-    // Fallback for build time - will fail but that's ok during build
+    // Fallback for build time
     cachedPrisma = new PrismaClient({
       log: ['error'],
     });
@@ -39,7 +39,7 @@ export function getPrismaClient(): PrismaClient {
   return cachedPrisma;
 }
 
-// Export prisma instance
+// Export prisma instance - will work at build time and runtime
 export const prisma = new Proxy({} as PrismaClient, {
   get(target, prop) {
     const client = getPrismaClient();

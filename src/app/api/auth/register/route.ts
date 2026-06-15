@@ -5,7 +5,7 @@ import { generateServerSeed, generateClientSeed, hashServerSeed } from '@/lib/fa
 
 export async function POST(request: Request) {
   try {
-    const { username, email, password } = await request.json();
+    const { username, email, password } = await request.json() as { username: string; email: string; password: string };
 
     if (!username || !email || !password) {
       return NextResponse.json(

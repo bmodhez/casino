@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { notImplementedYet } from '@/lib/stub-api';
+
+export async function GET() { return notImplementedYet(); }
+export async function POST() { return notImplementedYet(); }
+export async function PUT() { return notImplementedYet(); }
+export async function DELETE() { return notImplementedYet(); }
+
+/* Original code commented out:
 
 const WHEEL_SEGMENTS = [5, 10, 15, 20, 25, 30, 50, 75, 100, 150, 200];
 
@@ -57,3 +64,5 @@ export async function POST() {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+*/

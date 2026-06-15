@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { notImplementedYet } from '@/lib/stub-api';
+
+export async function GET() { return notImplementedYet(); }
+export async function POST() { return notImplementedYet(); }
+export async function PUT() { return notImplementedYet(); }
+export async function DELETE() { return notImplementedYet(); }
+
+/* Original code commented out:
 import { getCachedLeaderboard, setCachedLeaderboard } from '@/lib/leaderboard-cache';
 
 export async function GET(req: NextRequest) {
@@ -58,3 +65,5 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(leaderboard);
 }
+
+*/

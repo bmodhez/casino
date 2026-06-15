@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { notImplementedYet } from '@/lib/stub-api';
+
+export async function GET() { return notImplementedYet(); }
+export async function POST() { return notImplementedYet(); }
+export async function PUT() { return notImplementedYet(); }
+export async function DELETE() { return notImplementedYet(); }
+
+/* Original code commented out:
 
 function getWeekStart(date: Date): Date {
   const d = new Date(date);
@@ -53,3 +60,5 @@ export async function GET() {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+*/

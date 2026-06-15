@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { executeOne } from '@/lib/d1';
 
 export async function GET() {
   try {
@@ -9,10 +9,10 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { coins: true, xp: true, level: true },
-    });
+    const user = await executeOne(
+      'SELECT coins, xp, level FROM User WHERE id = ?',
+      [session.user.id]
+    );
 
     if (!user) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });

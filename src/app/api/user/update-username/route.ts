@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { notImplementedYet } from '@/lib/stub-api';
+
+export async function GET() { return notImplementedYet(); }
+export async function POST() { return notImplementedYet(); }
+export async function PUT() { return notImplementedYet(); }
+export async function DELETE() { return notImplementedYet(); }
+
+/* Original code commented out:
 
 export async function PUT(req: NextRequest) {
   const session = await auth();
@@ -30,3 +37,5 @@ export async function PUT(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
+
+*/

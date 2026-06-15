@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { notImplementedYet } from '@/lib/stub-api';
+
+export async function GET() { return notImplementedYet(); }
+export async function POST() { return notImplementedYet(); }
+export async function PUT() { return notImplementedYet(); }
+export async function DELETE() { return notImplementedYet(); }
+
+/* Original code commented out:
 import { getPlinkoPaths, getPlinkoMultiplier } from '@/lib/fairness';
 
 const VALID_ROWS = [8, 12, 16] as const;
@@ -92,3 +99,5 @@ export async function POST(req: NextRequest) {
     coins: user.coins + payout - betAmount,
   });
 }
+
+*/

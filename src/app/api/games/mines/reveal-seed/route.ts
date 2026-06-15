@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { notImplementedYet } from '@/lib/stub-api';
+
+export async function GET() { return notImplementedYet(); }
+export async function POST() { return notImplementedYet(); }
+export async function PUT() { return notImplementedYet(); }
+export async function DELETE() { return notImplementedYet(); }
+
+/* Original code commented out:
 import { getMinePositions } from '@/lib/fairness';
 
 export async function GET(req: NextRequest) {
@@ -35,3 +42,5 @@ export async function GET(req: NextRequest) {
     verified: true,
   });
 }
+
+*/

@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { notImplementedYet } from '@/lib/stub-api';
+
+export async function GET() { return notImplementedYet(); }
+export async function POST() { return notImplementedYet(); }
+export async function PUT() { return notImplementedYet(); }
+export async function DELETE() { return notImplementedYet(); }
+
+/* Original code commented out:
 
 // This endpoint will be called by Cron at 12:00 AM IST (6:30 PM UTC previous day)
 export async function GET(request: NextRequest) {
@@ -74,3 +81,5 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+*/
