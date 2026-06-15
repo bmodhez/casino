@@ -12,6 +12,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ user }: TopBarProps) {
+  // Version: 2.0 - XL breakpoint fix for mobile dropdown
   const { data: session, status } = useSession();
   const { coins, level, updateCoins } = useGameStore();
   const [showMenu, setShowMenu] = useState(false);
