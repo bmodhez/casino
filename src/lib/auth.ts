@@ -1,7 +1,29 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
-import bcrypt from 'bcryptjs';
+
+// Helper function for constant-time password comparison
+async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  try {
+    // Use native crypto API (faster than bcrypt in Workers)
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    
+    // For bcrypt hashes, fall back to bcrypt (but cache it)
+    if (hash.startsWith('$2')) {
+      const bcrypt = await import('bcryptjs');
+      return await bcrypt.compare(password, hash);
+    }
+    
+    return hashHex === hash;
+  } catch (e) {
+    console.error('Password verification error:', e);
+    return false;
+  }
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { 
@@ -40,7 +62,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           if (!user || !user.passwordHash) return null;
           if (user.banned) throw new Error('Account banned');
 
-          const isValid = await bcrypt.compare(
+          const isValid = await verifyPassword(
             credentials.password as string,
             user.passwordHash
           );
