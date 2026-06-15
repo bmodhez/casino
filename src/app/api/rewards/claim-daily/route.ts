@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { executeQuery, executeOne, executeRun } from '@/lib/d1';
+import { executeOne, executeRun } from '@/lib/d1';
 
 // Repeating 7-day reward cycle
 const DAILY_REWARDS: Record<number, number> = {
@@ -97,26 +97,38 @@ export async function POST(req: NextRequest) {
     console.log('[Claim Daily] New balance will be:', newBalance);
 
     // Create daily streak record and update user
-    const streakId = crypto.randomUUID();
+    // Generate UUID compatible with Cloudflare Workers
+    let streakId: string;
+    try {
+      streakId = crypto.randomUUID();
+    } catch (e) {
+      // Fallback for environments without crypto.randomUUID
+      streakId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }
     console.log('[Claim Daily] Creating streak record:', streakId);
     
     // Use D1 batch for transaction-like behavior
-    await executeRun(
-      `INSERT INTO DailyStreak (id, userId, day, weekStart, claimedAt, createdAt, updatedAt)
-       VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-      [streakId, session.user.id, day, today.toISOString(), today.toISOString()]
-    );
+    try {
+      await executeRun(
+        `INSERT INTO DailyStreak (id, userId, day, weekStart, claimedAt, createdAt, updatedAt)
+         VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+        [streakId, session.user.id, day, today.toISOString(), today.toISOString()]
+      );
 
-    console.log('[Claim Daily] Streak record created');
+      console.log('[Claim Daily] Streak record created');
 
-    await executeRun(
-      `UPDATE User 
-       SET coins = ?, lastDailyClaimed = ?, updatedAt = datetime('now')
-       WHERE id = ?`,
-      [newBalance, today.toISOString(), session.user.id]
-    );
+      await executeRun(
+        `UPDATE User 
+         SET coins = ?, lastDailyClaimed = ?, updatedAt = datetime('now')
+         WHERE id = ?`,
+        [newBalance, today.toISOString(), session.user.id]
+      );
 
-    console.log('[Claim Daily] User updated successfully');
+      console.log('[Claim Daily] User updated successfully');
+    } catch (dbError) {
+      console.error('[Claim Daily] Database error:', dbError);
+      throw dbError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -125,7 +137,12 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('[Claim Daily] Error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('[Claim Daily] Error stack:', error instanceof Error ? error.stack : 'No stack');
+    console.error('[Claim Daily] Error message:', error instanceof Error ? error.message : String(error));
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : String(error)
+    }, { status: 500 });
   }
 }
 
