@@ -46,6 +46,7 @@ export async function GET() {
     const response = {
       claimedDays: [], // Not needed for infinite streak
       currentStreak,
+      nextDay: currentStreak + 1, // Next claimable day
       canClaimToday,
     };
 
