@@ -281,34 +281,32 @@ export default function DashboardPage() {
       <div className="mt-12 max-w-4xl mx-auto">
         <article className="prose prose-invert max-w-none">
           <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-4">What is a Virtual Casino? Discover the Casino Simulator 2026</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Welcome to MinesArena - Free Social Gaming Platform</h2>
             
             <p className="text-slate-300 leading-relaxed mb-4">
-              Welcome to MinesArena, the premier <strong>casino simulator 2026</strong> that brings you authentic <strong>virtual casino games</strong> without any real money involvement. 
-              As a leading <strong>virtual casino</strong> platform, we offer an immersive gaming experience that rivals traditional online casinos, but with one key difference - 
-              everything is 100% free and purely for entertainment.
+              Welcome to MinesArena, a premier <strong>social gaming platform</strong> where you can enjoy exciting games with virtual coins - 
+              completely free and purely for entertainment. Play skill-based games, compete on leaderboards, and connect with players worldwide. 
+              <strong>No real money, no deposits, no risk</strong> - just pure fun!
             </p>
 
-            <h3 className="text-xl font-bold text-white mt-6 mb-3">The Ultimate Stake Alternative</h3>
+            <h3 className="text-xl font-bold text-white mt-6 mb-3">Free Social Games for Everyone</h3>
             
             <p className="text-slate-300 leading-relaxed mb-4">
-              Looking for the <strong>best Stake alternative</strong>? MinesArena is your answer. Our <strong>casino simulator online</strong> provides all the excitement 
-              of popular platforms like Stake and Crown Coins Casino, but as a <strong>virtual casino no deposit</strong> required platform. Whether you're searching for 
-              <strong> stake alternative sites</strong> or a <strong>casino simulator free</strong> to play, we've got you covered.
+              Experience exciting social games including Mines, Dice, Coinflip, and Plinko. All games use virtual coins that have 
+              <strong> no monetary value</strong>. Start with 1,000 free coins and earn more through daily rewards and the wheel of fortune!
             </p>
 
             <h3 className="text-xl font-bold text-white mt-6 mb-3">Competitive Gaming with Global Leaderboards</h3>
             
             <p className="text-slate-300 leading-relaxed mb-4">
-              What sets MinesArena apart as the <strong>best Stake alternative</strong> is our competitive focus. Unlike traditional <strong>casino simulator online</strong> platforms, 
-              we offer real-time <strong>leaderboards</strong> where you compete against players worldwide. Track your progress, climb the ranks, and prove your skills 
-              in our <strong>virtual casino games</strong>. Every game contributes to your position - will you reach the top?
+              What sets MinesArena apart is our competitive focus. Compete against players worldwide on our real-time <strong>leaderboards</strong>. 
+              Track your progress, climb the ranks, and prove your skills. Every game contributes to your position - will you reach the top?
             </p>
 
-            <h3 className="text-xl font-bold text-white mt-6 mb-3">Free Online Virtual Casino Games</h3>
+            <h3 className="text-xl font-bold text-white mt-6 mb-3">Our Social Games Collection</h3>
             
             <p className="text-slate-300 leading-relaxed mb-4">
-              Our collection of <strong>free online virtual casino games</strong> includes:
+              Our collection of <strong>free social games</strong> includes:
             </p>
             
             <ul className="list-disc list-inside text-slate-300 mb-4 space-y-2">
@@ -318,44 +316,44 @@ export default function DashboardPage() {
               <li><strong>Plinko</strong> - Watch your ball bounce through pegs for exciting wins</li>
             </ul>
 
-            <h3 className="text-xl font-bold text-white mt-6 mb-3">Virtual Casino Mobile Experience</h3>
+            <h3 className="text-xl font-bold text-white mt-6 mb-3">Mobile-Friendly Gaming Experience</h3>
             
             <p className="text-slate-300 leading-relaxed mb-4">
-              Access <strong>the virtual casino</strong> anytime, anywhere with our <strong>virtual casino mobile</strong> optimized platform. 
-              Our responsive design ensures smooth gameplay whether you're on desktop, tablet, or smartphone. Experience the full <strong>grand casino simulator</strong> 
-              experience in the palm of your hand.
+              Access MinesArena anytime, anywhere with our mobile-optimized platform. 
+              Our responsive design ensures smooth gameplay whether you're on desktop, tablet, or smartphone. 
+              Play your favorite games on the go!
             </p>
 
-            <h3 className="text-xl font-bold text-white mt-6 mb-3">Why Choose Our Casino Simulator Game?</h3>
+            <h3 className="text-xl font-bold text-white mt-6 mb-3">Why Choose MinesArena?</h3>
             
             <p className="text-slate-300 leading-relaxed mb-4">
-              Unlike traditional <strong>online casino</strong> platforms that require deposits and involve real money risks, our <strong>casino simulator game</strong> offers:
+              Unlike platforms that involve real money, MinesArena offers:
             </p>
 
             <ul className="list-disc list-inside text-slate-300 mb-4 space-y-2">
-              <li>🎮 <strong>Virtual casino no deposit bonus codes</strong> not needed - start with 1,000 free coins instantly</li>
-              <li>🔒 100% provably fair algorithms ensuring transparent gameplay</li>
-              <li>🏆 <strong>Competitive leaderboards</strong> - compete globally and track your rank</li>
-              <li>📊 <strong>Detailed statistics</strong> - monitor your win rate, total games, and performance</li>
-              <li>🎁 Daily rewards and wheel of fortune bonuses</li>
-              <li>📱 Fully responsive design for all devices</li>
-              <li>⚡ No downloads required - play directly in your browser</li>
-              <li>👥 <strong>Social features</strong> - see top players and compete for the #1 spot</li>
+              <li>🎮 <strong>100% Free to Play</strong> - Start with 1,000 free virtual coins instantly</li>
+              <li>🔒 <strong>Provably Fair Algorithms</strong> - Transparent gameplay you can verify</li>
+              <li>🏆 <strong>Global Leaderboards</strong> - Compete worldwide and track your rank</li>
+              <li>📊 <strong>Detailed Statistics</strong> - Monitor your performance and improve</li>
+              <li>🎁 <strong>Daily Rewards</strong> - Free coins every day plus wheel of fortune</li>
+              <li>📱 <strong>Mobile Optimized</strong> - Play seamlessly on any device</li>
+              <li>⚡ <strong>Instant Access</strong> - No downloads, play in your browser</li>
+              <li>👥 <strong>Social Features</strong> - Compete with friends and top players</li>
             </ul>
 
             <h3 className="text-xl font-bold text-white mt-6 mb-3">Safe & Legal Entertainment</h3>
             
             <p className="text-slate-300 leading-relaxed mb-4">
-              As a <strong>casino simulator free</strong> platform, we provide legal entertainment without the risks associated with real money gambling. 
-              Perfect for players who want to enjoy casino-style games, practice strategies, or simply have fun without financial commitment. 
-              Our <strong>virtual casino games</strong> are designed for entertainment only - no real money is involved, won, or lost.
+              MinesArena is a <strong>social gaming platform</strong> providing legal entertainment without any financial risk. 
+              Perfect for players who want to enjoy skill-based games, practice strategies, and compete with others - all for fun! 
+              Our platform is designed for <strong>entertainment only</strong> - no real money is involved, won, or lost.
             </p>
 
             <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 mt-6">
               <p className="text-amber-200 text-sm mb-0">
-                <strong>⚠️ Important Notice:</strong> MinesArena is a virtual casino simulator for entertainment purposes only. 
-                No real money gambling is involved. Virtual coins have no cash value and cannot be exchanged for real currency. 
-                This platform is designed as a safe, fun alternative to real money online casinos.
+                <strong>⚠️ Legal Notice:</strong> MinesArena is a free social gaming platform for entertainment purposes only. 
+                No real money gambling is involved. Virtual coins have NO MONETARY VALUE and cannot be exchanged for real currency or prizes. 
+                This platform is designed as a safe, fun social gaming experience. Must be 18+ to play.
               </p>
             </div>
           </div>

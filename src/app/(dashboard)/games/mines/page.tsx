@@ -32,7 +32,7 @@ interface CashoutResponse {
 export default function MinesPage() {
   const { coins, updateCoins } = useGameStore();
   const { requireAuth, showModal, setShowModal, isAuthenticated } = useAuthGuard();
-  const [betAmount, setBetAmount] = useState(10);
+  const [playAmount, setPlayAmount] = useState(10);
   const [mineCount, setMineCount] = useState(3);
   const [gameActive, setGameActive] = useState(false);
   const [cells, setCells] = useState<CellState[]>(Array(25).fill('hidden'));
@@ -120,7 +120,7 @@ export default function MinesPage() {
   };
 
   const startGame = async () => {
-    if (betAmount > coins || betAmount < 1) { setMsg('Insufficient coins'); return; }
+    if (playAmount > coins || playAmount < 1) { setMsg('Insufficient coins'); return; }
     
     // Check authentication before starting game
     if (!isAuthenticated) {
@@ -147,7 +147,7 @@ export default function MinesPage() {
     const res = await fetch('/api/games/mines', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ betAmount, mineCount }),
+      body: JSON.stringify({ betAmount: playAmount, mineCount }),
     });
     const data = await res.json() as { error?: string; gameId: string; minePositions: number[] };
     if (!res.ok) { setMsg(data.error ?? 'Error'); setLoading(false); return; }
@@ -160,7 +160,7 @@ export default function MinesPage() {
     setGameActive(true);
     setGameOver(false);
     setWon(false);
-    updateCoins(coins - betAmount);
+    updateCoins(coins - playAmount);
     setLoading(false);
   };
 
@@ -310,7 +310,7 @@ export default function MinesPage() {
     setGameOver(true);
     setWon(true);
     setMsg(`🎉 Won ${formatCoins(data.payout)} coins! (${data.multiplier.toFixed(2)}x)`);
-  }, [gameActive, gemsRevealed, multiplier, betAmount, isAuthenticated, gameId, coins, updateCoins, cellLoading]);
+  }, [gameActive, gemsRevealed, multiplier, playAmount, isAuthenticated, gameId, coins, updateCoins, cellLoading]);
 
   const safeCells = 25 - mineCount;
   
@@ -318,7 +318,7 @@ export default function MinesPage() {
   const previewMultiplier = gameActive ? multiplier : calculateMinesMultiplier(mineCount, 1);
   const displayMultiplier = gameActive ? multiplier : previewMultiplier;
   
-  const potentialPayout = betAmount * (gameActive ? multiplier : previewMultiplier);
+  const potentialPayout = playAmount * (gameActive ? multiplier : previewMultiplier);
 
   return (
     <div className="max-w-4xl mx-auto px-4 min-h-[calc(100vh-200px)]">
@@ -433,15 +433,15 @@ export default function MinesPage() {
         {/* Controls */}
         <div className="space-y-4" ref={controlsRef}>
           <div className="glass rounded-2xl p-5 space-y-4">
-            {/* Bet */}
+            {/* Play Amount */}
             <div>
-              <label className="text-sm font-medium text-slate-300 mb-2 block">Bet Amount</label>
+              <label className="text-sm font-medium text-slate-300 mb-2 block">Play Amount</label>
               <div className="relative">
                 <Coins className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-yellow-400" />
                 <input
                   type="number"
-                  value={betAmount}
-                  onChange={e => setBetAmount(Number(e.target.value))}
+                  value={playAmount}
+                  onChange={e => setPlayAmount(Number(e.target.value))}
                   className="input-dark pl-10 font-mono"
                   min="1"
                   max={coins}
@@ -452,7 +452,7 @@ export default function MinesPage() {
                 {[10, 50, 100, 500].map(v => (
                   <button
                     key={v}
-                    onClick={() => setBetAmount(v)}
+                    onClick={() => setPlayAmount(v)}
                     disabled={gameActive}
                     className="flex-1 py-1.5 text-xs rounded-lg bg-white/[0.03] hover:bg-white/[0.07] transition-colors text-slate-300 font-mono disabled:opacity-40 border border-white/5"
                   >
@@ -507,7 +507,7 @@ export default function MinesPage() {
               >
                 <button
                   onClick={startGame}
-                  disabled={loading || betAmount < 1 || betAmount > coins}
+                  disabled={loading || playAmount < 1 || playAmount > coins}
                   className="btn-primary w-full py-3 text-base relative"
                 >
                   {loading ? 'Starting...' : '🎮 Start Game'}
