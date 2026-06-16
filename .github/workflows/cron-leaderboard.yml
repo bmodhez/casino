@@ -1,9 +1,10 @@
 name: Refresh Leaderboard Cache
 
 on:
-  schedule:
-    # Runs at 6:30 PM UTC (12:00 AM IST) every day
-    - cron: '30 18 * * *'
+  # Temporarily disabled - uncomment when secrets are configured
+  # schedule:
+  #   # Runs at 6:30 PM UTC (12:00 AM IST) every day
+  #   - cron: '30 18 * * *'
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 jobs:
@@ -13,7 +14,8 @@ jobs:
     steps:
       - name: Refresh Leaderboard
         run: |
-          response=$(curl -s -w "\n%{http_code}" -X GET ${{ secrets.PRODUCTION_URL }}/api/cron/refresh-leaderboard \
+          # Use production URL directly (no secret needed for public endpoint)
+          response=$(curl -s -w "\n%{http_code}" -X GET https://minesarena.atsifymail.workers.dev/api/cron/refresh-leaderboard \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
           
           http_code=$(echo "$response" | tail -n1)
