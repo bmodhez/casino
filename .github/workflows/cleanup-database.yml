@@ -1,0 +1,24 @@
+name: Database Cleanup (DISABLED - Manual Only)
+
+on:
+  # DISABLED: Automatic cleanup is turned off
+  # schedule:
+  #   - cron: '0 3 * * 0'
+  workflow_dispatch: # Only manual trigger allowed
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Run Database Cleanup
+        run: |
+          curl -X GET \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://minesarena.atsifymail.workers.dev/api/cron/cleanup-database
+        continue-on-error: true
+      
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "Database cleanup failed! Check logs at https://dash.cloudflare.com"
