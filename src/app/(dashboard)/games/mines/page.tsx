@@ -126,13 +126,9 @@ export default function MinesPage() {
     }
 
     // Play start sound
-    try {
-      if (startSoundRef.current) {
-        startSoundRef.current.currentTime = 0; // Reset to start
-        await startSoundRef.current.play();
-      }
-    } catch (e) {
-      console.log('Audio play failed:', e);
+    if (startSoundRef.current) {
+      startSoundRef.current.currentTime = 0;
+      startSoundRef.current.play().catch(e => console.log('Start sound play failed:', e));
     }
 
     setLoading(true);
@@ -198,13 +194,9 @@ export default function MinesPage() {
       if (data.result === 'mine') {
         console.log('[Mines] Hit mine! Revealing all mines:', data.minePositions);
         // Play bomb sound
-        try {
-          if (bombSoundRef.current) {
-            bombSoundRef.current.currentTime = 0;
-            await bombSoundRef.current.play();
-          }
-        } catch (e) {
-          console.log('Audio play failed:', e);
+        if (bombSoundRef.current) {
+          bombSoundRef.current.currentTime = 0;
+          bombSoundRef.current.play().catch(e => console.log('Bomb sound play failed:', e));
         }
         
         // Show all mines when hit
@@ -225,13 +217,9 @@ export default function MinesPage() {
       } else if (data.result === 'safe') {
         console.log('[Mines] Revealed gem at index:', index);
         // Play gem sound
-        try {
-          if (gemSoundRef.current) {
-            gemSoundRef.current.currentTime = 0;
-            await gemSoundRef.current.play();
-          }
-        } catch (e) {
-          console.log('Audio play failed:', e);
+        if (gemSoundRef.current) {
+          gemSoundRef.current.currentTime = 0;
+          gemSoundRef.current.play().catch(e => console.log('Gem sound play failed:', e));
         }
         
         // Reveal gem immediately
@@ -293,13 +281,9 @@ export default function MinesPage() {
     if (!res.ok) { setMsg(data.error ?? 'Error'); return; }
 
     // Play cashout sound
-    try {
-      if (cashoutSoundRef.current) {
-        cashoutSoundRef.current.currentTime = 0;
-        await cashoutSoundRef.current.play();
-      }
-    } catch (e) {
-      console.log('Audio play failed:', e);
+    if (cashoutSoundRef.current) {
+      cashoutSoundRef.current.currentTime = 0;
+      cashoutSoundRef.current.play().catch(e => console.log('Cashout sound play failed:', e));
     }
 
     updateCoins(data.coins);
