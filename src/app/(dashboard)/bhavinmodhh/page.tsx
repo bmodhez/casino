@@ -116,6 +116,8 @@ export default function AdminPanel() {
     setActionLoading(true);
     setMsg('');
     
+    console.log('[Admin] Adjusting coins:', { userId, amount });
+    
     try {
       const res = await fetch('/api/admin/users/adjust-coins', {
         method: 'POST',
@@ -123,15 +125,20 @@ export default function AdminPanel() {
         body: JSON.stringify({ userId, amount }),
       });
 
+      console.log('[Admin] Response status:', res.status);
+      const data = await res.json();
+      console.log('[Admin] Response data:', data);
+
       if (res.ok) {
-        setMsg(`Coins adjusted by ${amount > 0 ? '+' : ''}${amount}`);
-        fetchData();
+        setMsg(`Coins adjusted by ${amount > 0 ? '+' : ''}${formatCoins(amount)}`);
+        await fetchData(); // Refresh data
         setSelectedUser(null);
       } else {
-        setMsg('Failed to adjust coins');
+        setMsg(data.error || 'Failed to adjust coins');
       }
     } catch (error) {
-      setMsg('Network error');
+      console.error('[Admin] Error adjusting coins:', error);
+      setMsg('Network error: ' + (error as Error).message);
     } finally {
       setActionLoading(false);
     }
