@@ -126,9 +126,15 @@ export default function MinesPage() {
     }
 
     // Play start sound
+    console.log('[SOUND] Attempting to play start sound...');
+    console.log('[SOUND] startSoundRef.current:', startSoundRef.current);
     if (startSoundRef.current) {
       startSoundRef.current.currentTime = 0;
-      startSoundRef.current.play().catch(e => console.log('Start sound play failed:', e));
+      startSoundRef.current.play()
+        .then(() => console.log('[SOUND] Start sound played successfully'))
+        .catch(e => console.error('[SOUND] Start sound play failed:', e));
+    } else {
+      console.error('[SOUND] startSoundRef is null!');
     }
 
     setLoading(true);
@@ -194,9 +200,14 @@ export default function MinesPage() {
       if (data.result === 'mine') {
         console.log('[Mines] Hit mine! Revealing all mines:', data.minePositions);
         // Play bomb sound
+        console.log('[SOUND] Attempting to play bomb sound...');
         if (bombSoundRef.current) {
           bombSoundRef.current.currentTime = 0;
-          bombSoundRef.current.play().catch(e => console.log('Bomb sound play failed:', e));
+          bombSoundRef.current.play()
+            .then(() => console.log('[SOUND] Bomb sound played successfully'))
+            .catch(e => console.error('[SOUND] Bomb sound play failed:', e));
+        } else {
+          console.error('[SOUND] bombSoundRef is null!');
         }
         
         // Show all mines when hit
@@ -217,9 +228,14 @@ export default function MinesPage() {
       } else if (data.result === 'safe') {
         console.log('[Mines] Revealed gem at index:', index);
         // Play gem sound
+        console.log('[SOUND] Attempting to play gem sound...');
         if (gemSoundRef.current) {
           gemSoundRef.current.currentTime = 0;
-          gemSoundRef.current.play().catch(e => console.log('Gem sound play failed:', e));
+          gemSoundRef.current.play()
+            .then(() => console.log('[SOUND] Gem sound played successfully'))
+            .catch(e => console.error('[SOUND] Gem sound play failed:', e));
+        } else {
+          console.error('[SOUND] gemSoundRef is null!');
         }
         
         // Reveal gem immediately
