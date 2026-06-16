@@ -2,10 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { executeRun } from '@/lib/d1';
 
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { executeRun } from '@/lib/d1';
-
 export async function POST(req: NextRequest) {
   try {
     console.log('[Admin Adjust Coins] Request received');
