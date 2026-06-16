@@ -3,7 +3,6 @@ import { MobileNav } from '@/components/layout/MobileNav';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEOContent } from '@/components/SEOContent';
-import { LegalDisclaimer } from '@/components/LegalDisclaimer';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,7 +15,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Header />
           </div>
           
-          <main className="flex-1 overflow-y-auto pb-16">
+          <main className="flex-1 overflow-y-auto">
             <div className="p-4 lg:p-6 min-h-[calc(100vh-50px)]">
               {children}
             </div>
@@ -28,8 +27,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
         <MobileNav />
       </div>
-      {/* Legal Disclaimer - Fixed at bottom */}
-      <LegalDisclaimer />
     </div>
   );
 }
