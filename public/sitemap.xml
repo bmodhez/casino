@@ -4,7 +4,7 @@
   <!-- Home Page -->
   <url>
     <loc>https://minesarena.com/</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -12,7 +12,7 @@
   <!-- Dashboard -->
   <url>
     <loc>https://minesarena.com/dashboard</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -20,28 +20,28 @@
   <!-- Games -->
   <url>
     <loc>https://minesarena.com/games/mines</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://minesarena.com/games/dice</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://minesarena.com/games/coinflip</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://minesarena.com/games/plinko</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -49,29 +49,37 @@
   <!-- Leaderboard -->
   <url>
     <loc>https://minesarena.com/leaderboard</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
+  </url>
+
+  <!-- Profile -->
+  <url>
+    <loc>https://minesarena.com/profile</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <!-- Legal Pages -->
   <url>
     <loc>https://minesarena.com/privacy-policy</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://minesarena.com/terms-of-service</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://minesarena.com/responsible-gaming</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -79,9 +87,24 @@
   <!-- Contact -->
   <url>
     <loc>https://minesarena.com/contact</loc>
-    <lastmod>2024-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+
+  <!-- Auth Pages -->
+  <url>
+    <loc>https://minesarena.com/auth/login</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://minesarena.com/auth/register</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
   
 </urlset>
