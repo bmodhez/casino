@@ -68,7 +68,7 @@ function HeroSection() {
   ];
 
   return (
-    <div className="mb-8 mt-12">
+    <div className="mb-6 mt-4">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -227,7 +227,7 @@ export default function DashboardPage() {
         variants={stagger}
         initial="hidden"
         animate="show"
-        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+        className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12"
       >
         {games.map((game) => (
           <GameCard key={game.name} game={game} />

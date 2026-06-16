@@ -142,7 +142,7 @@
   }
 
   .game-card-art {
-    height: 180px;
+    height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -153,20 +153,20 @@
   }
 
   .game-card-body {
-    padding: 20px;
+    padding: 24px;
     background: var(--bg-card);
   }
 
   .game-card-title {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     color: var(--text-1);
   }
 
   .game-card-desc {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     line-height: 1.5;
     color: var(--text-2);
     font-weight: 400;
