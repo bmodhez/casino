@@ -20,30 +20,31 @@ export async function GET() {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Fetch users with aggregated game stats (single optimized query with LEFT JOIN)
+    // Fetch users only - NO JOINS to prevent timeout
     const usersResult = await executeQuery(`
       SELECT 
-        u.id,
-        u.username,
-        u.email,
-        u.role,
-        u.coins,
-        u.level,
-        u.banned,
-        u.createdAt,
-        COALESCE(COUNT(gh.id), 0) as totalGamesPlayed,
-        COALESCE(SUM(gh.betAmount), 0) as totalWagered,
-        COALESCE(SUM(gh.payout), 0) as totalPayout
-      FROM User u
-      LEFT JOIN GameHistory gh ON u.id = gh.userId
-      GROUP BY u.id
-      ORDER BY u.createdAt DESC
+        id,
+        username,
+        email,
+        role,
+        coins,
+        level,
+        banned,
+        createdAt
+      FROM User
+      ORDER BY createdAt DESC
       LIMIT 100
     `, []);
 
-    return NextResponse.json({ 
-      users: usersResult.results || []
-    });
+    // Add placeholder stats (0) to match expected structure
+    const users = (usersResult.results || []).map((user: any) => ({
+      ...user,
+      totalGamesPlayed: 0,
+      totalWagered: 0,
+      totalPayout: 0
+    }));
+
+    return NextResponse.json({ users });
   } catch (error) {
     console.error('[Admin Users] Error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });

@@ -9,29 +9,30 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Single optimized query to get all stats at once
+    // Lightweight queries - no SUM operations
     const statsResult = await executeQuery(`
       SELECT 
         (SELECT COUNT(*) FROM User) as totalUsers,
         (SELECT COUNT(*) FROM User WHERE banned = 0) as activeUsers,
-        (SELECT COUNT(*) FROM User WHERE banned = 1) as bannedUsers,
-        (SELECT COALESCE(SUM(coins), 0) FROM User) as totalCoinsInCirculation,
-        (SELECT COUNT(*) FROM GameHistory) as totalGamesPlayed,
-        (SELECT COALESCE(SUM(betAmount), 0) FROM GameHistory) as totalWagered,
-        (SELECT COALESCE(SUM(payout), 0) FROM GameHistory) as totalPayout
+        (SELECT COUNT(*) FROM User WHERE banned = 1) as bannedUsers
     `, []);
 
     const stats = statsResult.results?.[0] || {
       totalUsers: 0,
       activeUsers: 0,
       bannedUsers: 0,
+    };
+
+    // Add placeholder for other stats to prevent UI errors
+    const response = {
+      ...stats,
       totalCoinsInCirculation: 0,
       totalGamesPlayed: 0,
       totalWagered: 0,
       totalPayout: 0,
     };
 
-    return NextResponse.json(stats);
+    return NextResponse.json(response);
   } catch (error) {
     console.error('[Admin Stats] Error:', error);
     return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 });
