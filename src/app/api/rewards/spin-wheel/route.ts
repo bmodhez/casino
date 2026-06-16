@@ -12,7 +12,7 @@ export async function POST() {
     }
 
     const user = await executeOne(
-      'SELECT coins, lastDailyClaimed FROM User WHERE id = ?',
+      'SELECT coins, lastWheelSpin FROM User WHERE id = ?',
       [session.user.id]
     );
 
@@ -21,8 +21,8 @@ export async function POST() {
     }
 
     // Check if already spun in last 24 hours
-    if (user.lastDailyClaimed) {
-      const lastSpinDate = new Date(user.lastDailyClaimed);
+    if (user.lastWheelSpin) {
+      const lastSpinDate = new Date(user.lastWheelSpin);
       const now = new Date();
       const hoursPassed = (now.getTime() - lastSpinDate.getTime()) / (1000 * 60 * 60);
 
@@ -40,7 +40,7 @@ export async function POST() {
 
     await executeRun(
       `UPDATE User 
-       SET coins = ?, lastDailyClaimed = ?, updatedAt = datetime('now')
+       SET coins = ?, lastWheelSpin = ?, updatedAt = datetime('now')
        WHERE id = ?`,
       [newBalance, new Date().toISOString(), session.user.id]
     );

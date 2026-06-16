@@ -10,7 +10,7 @@ export async function GET() {
     }
 
     const user = await executeOne(
-      'SELECT lastDailyClaimed FROM User WHERE id = ?',
+      'SELECT lastWheelSpin FROM User WHERE id = ?',
       [session.user.id]
     );
 
@@ -21,9 +21,9 @@ export async function GET() {
     let canSpin = true;
     let timeLeft = 0;
 
-    // Using lastDailyClaimed to track wheel spins
-    if (user.lastDailyClaimed) {
-      const lastSpinDate = new Date(user.lastDailyClaimed);
+    // Check last wheel spin time
+    if (user.lastWheelSpin) {
+      const lastSpinDate = new Date(user.lastWheelSpin);
       const now = new Date();
       const hoursPassed = (now.getTime() - lastSpinDate.getTime()) / (1000 * 60 * 60);
 

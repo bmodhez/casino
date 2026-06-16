@@ -80,10 +80,11 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
         console.error('Daily status fetch failed:', res.status);
         return;
       }
-      const data = await res.json() as { claimedDays?: number[]; currentStreak?: number; canClaimToday?: boolean };
+      const data = await res.json() as { claimedDays?: number[]; currentStreak?: number; canClaimToday?: boolean; nextDay?: number };
       if (data.claimedDays) setClaimedDays(data.claimedDays);
       if (data.currentStreak !== undefined) setCurrentStreak(data.currentStreak);
       if (data.canClaimToday !== undefined) setCanClaimToday(data.canClaimToday);
+      console.log('[RewardsModal] Daily status:', { currentStreak: data.currentStreak, canClaimToday: data.canClaimToday, nextDay: data.nextDay });
     } catch (error) {
       console.error('Failed to fetch daily status:', error);
     }
@@ -97,6 +98,7 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
         return;
       }
       const data = await res.json() as { canSpin?: boolean; timeLeft?: number };
+      console.log('[RewardsModal] Wheel status:', data);
       if (data.canSpin !== undefined) {
         setCanSpin(data.canSpin);
         if (!data.canSpin && data.timeLeft) {
@@ -155,8 +157,13 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
   };
 
   const spinWheel = async () => {
-    if (spinning || !canSpin) return;
+    console.log('[RewardsModal] Spin clicked - spinning:', spinning, 'canSpin:', canSpin);
+    if (spinning || !canSpin) {
+      console.log('[RewardsModal] Spin blocked - spinning:', spinning, 'canSpin:', canSpin);
+      return;
+    }
 
+    console.log('[RewardsModal] Starting spin...');
     setSpinning(true);
     setWheelResult(null);
 
@@ -289,7 +296,9 @@ export function RewardsModal({ isOpen, onClose }: RewardsModalProps) {
                     const dayNumber = currentStreak + i + 1;
                     const cycleDay = ((dayNumber - 1) % 7) + 1;
                     const reward = DAILY_REWARDS.find(r => r.day === cycleDay);
-                    const isClaimed = i === 0 && !canClaimToday; // Only first day can be claimed
+                    // If canClaimToday=true and i=0, it means we can claim this day (it's not claimed yet)
+                    // If canClaimToday=false and i=0, it means we already claimed today (show as claimed)
+                    const isClaimed = i === 0 && !canClaimToday;
                     const isAvailable = i === 0 && canClaimToday && !claiming;
                     const isJustClaimed = justClaimed === dayNumber;
 
