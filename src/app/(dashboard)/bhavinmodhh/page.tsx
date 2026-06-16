@@ -126,7 +126,7 @@ export default function AdminPanel() {
       });
 
       console.log('[Admin] Response status:', res.status);
-      const data = await res.json();
+      const data = await res.json() as { success?: boolean; message?: string; error?: string };
       console.log('[Admin] Response data:', data);
 
       if (res.ok) {
