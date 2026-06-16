@@ -59,12 +59,15 @@ export default function MinesPage() {
   const cashoutSoundRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Preload audio files on client side only
+    // Preload audio files from CDN (jsDelivr)
     if (typeof window !== 'undefined') {
-      startSoundRef.current = new Audio('/startbtn.mp3');
-      gemSoundRef.current = new Audio('/gemsreveal.mp3');
-      bombSoundRef.current = new Audio('/bombhitt.mp3');
-      cashoutSoundRef.current = new Audio('/cashout.mp3');
+      // Using jsDelivr CDN for free audio hosting
+      const CDN_BASE = 'https://cdn.jsdelivr.net/gh/bmodhez/minesarena-assets@main/sounds';
+      
+      startSoundRef.current = new Audio(`${CDN_BASE}/startbtn.mp3`);
+      gemSoundRef.current = new Audio(`${CDN_BASE}/gemsreveal.mp3`);
+      bombSoundRef.current = new Audio(`${CDN_BASE}/bombhitt.mp3`);
+      cashoutSoundRef.current = new Audio(`${CDN_BASE}/cashout.mp3`);
       
       // Set volume
       if (startSoundRef.current) startSoundRef.current.volume = 0.5;
