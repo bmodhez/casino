@@ -62,7 +62,7 @@ export default function MinesPage() {
     // Preload audio files from CDN (jsDelivr)
     if (typeof window !== 'undefined') {
       // Using jsDelivr CDN for free audio hosting
-      const CDN_BASE = 'https://cdn.jsdelivr.net/gh/bmodhez/minesarena-assets@main/sounds';
+      const CDN_BASE = 'https://cdn.jsdelivr.net/gh/bmodhez/minesarena-assets@main';
       
       startSoundRef.current = new Audio(`${CDN_BASE}/startbtn.mp3`);
       gemSoundRef.current = new Audio(`${CDN_BASE}/gemsreveal.mp3`);
