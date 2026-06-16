@@ -56,17 +56,22 @@ export default function MinesPage() {
   const startSoundRef = useRef<HTMLAudioElement | null>(null);
   const gemSoundRef = useRef<HTMLAudioElement | null>(null);
   const bombSoundRef = useRef<HTMLAudioElement | null>(null);
+  const cashoutSoundRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Preload audio files
-    startSoundRef.current = new Audio('/startbtn.mp3');
-    gemSoundRef.current = new Audio('/gemsreveal.mp3');
-    bombSoundRef.current = new Audio('/bombhitt.mp3');
-    
-    // Set volume
-    if (startSoundRef.current) startSoundRef.current.volume = 0.3;
-    if (gemSoundRef.current) gemSoundRef.current.volume = 0.4;
-    if (bombSoundRef.current) bombSoundRef.current.volume = 0.5;
+    // Preload audio files on client side only
+    if (typeof window !== 'undefined') {
+      startSoundRef.current = new Audio('/startbtn.mp3');
+      gemSoundRef.current = new Audio('/gemsreveal.mp3');
+      bombSoundRef.current = new Audio('/bombhitt.mp3');
+      cashoutSoundRef.current = new Audio('/cashout.mp3');
+      
+      // Set volume
+      if (startSoundRef.current) startSoundRef.current.volume = 0.5;
+      if (gemSoundRef.current) gemSoundRef.current.volume = 0.5;
+      if (bombSoundRef.current) bombSoundRef.current.volume = 0.6;
+      if (cashoutSoundRef.current) cashoutSoundRef.current.volume = 0.5;
+    }
 
     return () => {
       if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
@@ -121,7 +126,14 @@ export default function MinesPage() {
     }
 
     // Play start sound
-    startSoundRef.current?.play().catch(e => console.log('Audio play failed:', e));
+    try {
+      if (startSoundRef.current) {
+        startSoundRef.current.currentTime = 0; // Reset to start
+        await startSoundRef.current.play();
+      }
+    } catch (e) {
+      console.log('Audio play failed:', e);
+    }
 
     setLoading(true);
     setMsg('');
@@ -186,7 +198,14 @@ export default function MinesPage() {
       if (data.result === 'mine') {
         console.log('[Mines] Hit mine! Revealing all mines:', data.minePositions);
         // Play bomb sound
-        bombSoundRef.current?.play().catch(e => console.log('Audio play failed:', e));
+        try {
+          if (bombSoundRef.current) {
+            bombSoundRef.current.currentTime = 0;
+            await bombSoundRef.current.play();
+          }
+        } catch (e) {
+          console.log('Audio play failed:', e);
+        }
         
         // Show all mines when hit
         if (data.minePositions && data.minePositions.length > 0) {
@@ -206,7 +225,14 @@ export default function MinesPage() {
       } else if (data.result === 'safe') {
         console.log('[Mines] Revealed gem at index:', index);
         // Play gem sound
-        gemSoundRef.current?.play().catch(e => console.log('Audio play failed:', e));
+        try {
+          if (gemSoundRef.current) {
+            gemSoundRef.current.currentTime = 0;
+            await gemSoundRef.current.play();
+          }
+        } catch (e) {
+          console.log('Audio play failed:', e);
+        }
         
         // Reveal gem immediately
         updatedCells[index] = 'gem';
@@ -266,8 +292,15 @@ export default function MinesPage() {
 
     if (!res.ok) { setMsg(data.error ?? 'Error'); return; }
 
-    // Play cashout sound (same as start button)
-    startSoundRef.current?.play().catch(e => console.log('Audio play failed:', e));
+    // Play cashout sound
+    try {
+      if (cashoutSoundRef.current) {
+        cashoutSoundRef.current.currentTime = 0;
+        await cashoutSoundRef.current.play();
+      }
+    } catch (e) {
+      console.log('Audio play failed:', e);
+    }
 
     updateCoins(data.coins);
     setGameActive(false);
